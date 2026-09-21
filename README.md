@@ -1,40 +1,23 @@
-# jasonMatney.github.io
+# Jason Matney — personal website
 
-Personal site for **Jason Matney, Ph.D.** — Director, Data Visualization & Analytics.
+An editorial atlas portfolio with an independent, synthetic road-access demonstration. Hosted at https://jasonmatney.github.io/ through GitHub Pages from `main`.
 
-Live URL: [https://jasonmatney.github.io/](https://jasonmatney.github.io/)
+## Run locally
 
-## Stack
+Serve the repository with any static HTTP server, for example `python3 -m http.server 8000`. JavaScript modules require HTTP rather than opening the file directly.
 
-Plain static files at the repo root (no build step):
+Run the network checks with `node --test tests/network.test.mjs`.
 
-- `index.html` — content and structure
-- `styles.css` — layout and typography
-- `favicon.svg` — simple mark
+## Contents
 
-GitHub Pages serves these from the `main` branch, `/` (root).
+- `index.html`: public biography, experience, contact, and accessible demonstration controls.
+- `styles.css`: responsive editorial design, reduced-motion support, and typography fallbacks.
+- `app.js`: original SVG cartography, controls, and accessible result updates.
+- `network.mjs`: synthetic graph and shortest-path analysis.
+- `tests/network.test.mjs`: route validity, known results, and coverage invariants.
 
-## Edit the site
+## Content boundaries
 
-1. Clone this repo.
-2. Edit `index.html` for copy; tweak `styles.css` for look.
-3. Preview locally by opening `index.html` in a browser, or run a tiny static server:
-   ```bash
-   python3 -m http.server 8000
-   ```
-   then visit `http://localhost:8000`.
-4. Commit and push to `main`. Pages picks up changes in a minute or two.
+The map uses fictional places, populations, geometry, and fixed travel times. It is an original personal demonstration, not a federal deliverable or operational model. It does not use client source code or data. Professional experience is described at a high level. The Military OneSource link points to a public resource; its illustration is typographic, not an agency screenshot. No new performance or contract-value claims are introduced.
 
-## Enable / confirm GitHub Pages
-
-**Settings → Pages** (recommended if the API is unavailable):
-
-1. Open [Repository Settings → Pages](https://github.com/jasonMatney/jasonMatney.github.io/settings/pages).
-2. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-3. Branch: **main**, folder: **/ (root)**.
-4. Save. The site publishes at `https://jasonmatney.github.io/`.
-
-## Notes
-
-- Phone number is intentionally omitted from the public site.
-- Contact links: email, [LinkedIn](https://www.linkedin.com/in/jason-matney-51714259/), and GitHub.
+The local `design/` folder contains the ImageGen visual reference and prompt; it is not required to serve the site. The actual site uses editable SVG and HTML, not a raster mockup.
