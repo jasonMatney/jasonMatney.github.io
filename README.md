@@ -24,6 +24,6 @@ The map uses fictional places, populations, geometry, and fixed travel times. It
 
 The local `design/` folder contains the ImageGen visual reference and prompt; it is not required to serve the site. The actual site uses editable SVG and HTML, not a raster mockup.
 
-The 3D scene is loaded near the viewport and pauses rendering while offscreen. Rotation is opt-in on mobile; camera zoom, top view, and reset are explicit controls. The SVG map and travel-time table remain available when WebGL cannot initialize. Procedural terrain is illustrative and does not affect the fixed synthetic travel times.
+The 3D scene is loaded near the viewport and pauses rendering while offscreen. Its loading surface keeps the older SVG scene from flashing during the Three.js handoff. Rotation is opt-in on mobile; camera zoom, top view, and reset are explicit controls. The SVG map and travel-time table remain available when WebGL cannot initialize. Procedural terrain is illustrative and does not affect the fixed synthetic travel times.
 
 Cinematic controls: Play flyover runs an 18-second, three-shot camera sequence. Stop, orbit, camera controls, or a changed route interrupt it. Camera changes ease from the current position; zoom is damped. Reroutes reveal over 1.25 seconds with a short fade of the previous route. The traveling light follows arc length at a consistent visual speed; it is not a travel-time simulation. Reduced-motion preference disables flyover, moving highlights, and water motion.

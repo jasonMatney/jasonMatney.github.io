@@ -15,6 +15,7 @@ hero.append(el('path',{d:'M115 -20 Q420 160 310 330 T400 760',stroke:'#a9b9a2','
 hero.append(el('path',{d:'M180 80L310 175L365 290L260 410L390 535L545 620',stroke:'#b76138','stroke-width':1.5,'stroke-dasharray':'3 5',fill:'none'}));
 for(const[x,y]of [[180,80],[310,175],[365,290],[260,410],[390,535],[545,620]]){hero.append(el('circle',{cx:x,cy:y,r:5,fill:'#f3f1e9',stroke:'#b76138','stroke-width':1.5}));hero.append(el('circle',{cx:x,cy:y,r:11,fill:'none',stroke:'#b76138',opacity:.2}));}
 const map=$('#network-map');
+const sceneStage=$('.scene-stage');
 contours(map,260,140,210,180,16,'#789879',.2);contours(map,650,360,190,140,13,'#789879',.2);
 map.append(el('path',{d:'M470 -40C380 100 510 175 468 285S455 420 520 530',stroke:'#234f47','stroke-width':37,fill:'none'}));
 map.append(el('text',{x:475,y:435,fill:'#88a597','font-size':13,'font-style':'italic','font-family':'Georgia',transform:'rotate(-77 475 435)'},'Cedar River'));
@@ -33,7 +34,7 @@ map.append(closure);
 let closed=false;
 let experience=null;
 function selectCommunity(id){$('#community').value=id;render();}
-const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting))return;observer.disconnect();try{const {createExperience}=await import('./experience.js?v=cinema1');experience=createExperience({host:$('#scene-3d'),labels:$('#scene-labels'),onSelect:selectCommunity});render();}catch(error){console.warn('3D view unavailable; using accessible map.',error);$('#scene-status').textContent='3D unavailable on this device. The map and access controls remain available.';}},{rootMargin:'300px'});
+const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting))return;observer.disconnect();try{const {createExperience}=await import('./experience.js?v=cinema2');experience=createExperience({host:$('#scene-3d'),labels:$('#scene-labels'),onSelect:selectCommunity});sceneStage.dataset.sceneState='ready';sceneStage.setAttribute('aria-busy','false');render();}catch(error){console.warn('3D view unavailable; using accessible map.',error);sceneStage.dataset.sceneState='fallback';sceneStage.setAttribute('aria-busy','false');$('#scene-status').textContent='3D unavailable on this device. The map and access controls remain available.';}},{rootMargin:'300px'});
 observer.observe($('#simulation'));
 function render(){
  const threshold=Number($('#threshold').value), selected=$('#community').value, result=analyze(closed,threshold), route=shortestRoute(selected,closed),baseline=shortestRoute(selected,false);
