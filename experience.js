@@ -11,7 +11,7 @@ export function createExperience({host,labels,onSelect}) {
  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;
  host.append(renderer.domElement);renderer.domElement.setAttribute('aria-label','Cedar Bay 3D landscape. Use the view buttons to rotate and zoom; choose a community to follow its route.');
  const camera=new THREE.PerspectiveCamera(38,1,.1,300);
- const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.065;controls.rotateSpeed=.55;controls.enablePan=false;controls.enableZoom=false;controls.minPolarAngle=.12;controls.maxPolarAngle=1.18;controls.target.set(0,0,0);
+ const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.065;controls.rotateSpeed=.55;controls.autoRotateSpeed=.8;controls.enablePan=false;controls.enableZoom=false;controls.minPolarAngle=.12;controls.maxPolarAngle=1.18;controls.target.set(0,0,0);
  const ambient=new THREE.HemisphereLight('#ecf3dc','#405649',2.5);scene.add(ambient);
  const sun=new THREE.DirectionalLight('#ffe1b1',3.2);sun.position.set(-25,65,35);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-55,right:55,top:45,bottom:-45,near:1,far:130});sun.shadow.bias=-.0004;sun.shadow.normalBias=.15;scene.add(sun);
  const fill=new THREE.DirectionalLight('#aeced6',1.2);fill.position.set(40,20,-30);scene.add(fill);
@@ -65,18 +65,21 @@ export function createExperience({host,labels,onSelect}) {
   if(reduced.matches){camera.position.copy(position);controls.target.copy(target);camera.lookAt(target);tween=null;return;}
   tween={from:camera.position.clone(),to:position.clone(),targetFrom:controls.target.clone(),targetTo:target.clone(),age:0,duration};
  }
+ const orbitButton=document.querySelector('#orbit-toggle');
  function stopFilm(){flyover=null;tween=null;film.textContent=reduced.matches?'Reduced motion':'Play flyover';film.setAttribute('aria-pressed','false');caption.classList.remove('visible');host.dataset.flyover='stopped';}
- function interaction(value){controls.enabled=value;renderer.domElement.style.pointerEvents=value?'auto':'none';document.querySelector('#orbit-toggle').setAttribute('aria-pressed',String(value));status.textContent=value?'Drag to orbit · Select a community · Use + / − to zoom':'Select a community · Enable rotation to explore';}
+ function interaction(value){controls.enabled=value;renderer.domElement.style.pointerEvents=value?'auto':'none';status.textContent=controls.autoRotate?'Scene rotating · Drag to orbit · Use + / − to zoom':value?'Drag to orbit · Select a community · Use + / − to zoom':'Select a community · Enable rotation to explore';}
+ function setAutoRotate(value){const next=Boolean(value)&&!reduced.matches;controls.autoRotate=next;if(next){controls.enabled=true;renderer.domElement.style.pointerEvents='auto';}orbitButton.setAttribute('aria-pressed',String(next));orbitButton.textContent=next?'Stop rotation':'Rotate scene';interaction(controls.enabled);}
  interaction(matchMedia('(pointer:fine) and (min-width:701px)').matches);
- controls.addEventListener('start',()=>{stopFilm();tween=null;isTop=false;document.querySelector('#view-top').setAttribute('aria-pressed','false');});
- function reset(immediate=false){stopFilm();isTop=false;desiredZoom=1;if(immediate){camera.position.copy(overview());controls.target.set(0,0,0);camera.zoom=1;camera.lookAt(controls.target);}else moveTo(overview());document.querySelector('#view-top').setAttribute('aria-pressed','false');}
- document.querySelector('#orbit-toggle').onclick=()=>{stopFilm();tween=null;interaction(!controls.enabled);};
+ setAutoRotate(false);
+ controls.addEventListener('start',()=>{stopFilm();setAutoRotate(false);tween=null;isTop=false;document.querySelector('#view-top').setAttribute('aria-pressed','false');});
+ function reset(immediate=false){stopFilm();setAutoRotate(false);isTop=false;desiredZoom=1;if(immediate){camera.position.copy(overview());controls.target.set(0,0,0);camera.zoom=1;camera.lookAt(controls.target);}else moveTo(overview());document.querySelector('#view-top').setAttribute('aria-pressed','false');}
+ orbitButton.onclick=()=>{stopFilm();tween=null;setAutoRotate(!controls.autoRotate);};
  document.querySelector('#view-reset').onclick=()=>reset();
- document.querySelector('#view-top').onclick=()=>{stopFilm();isTop=!isTop;desiredZoom=1;moveTo(isTop?new THREE.Vector3(0,Math.max(100,48/(Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect)),.1):overview());document.querySelector('#view-top').setAttribute('aria-pressed',String(isTop));};
- function zoom(factor){stopFilm();desiredZoom=THREE.MathUtils.clamp(desiredZoom*factor,.75,2);}
+ document.querySelector('#view-top').onclick=()=>{stopFilm();setAutoRotate(false);isTop=!isTop;desiredZoom=1;moveTo(isTop?new THREE.Vector3(0,Math.max(100,48/(Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect)),.1):overview());document.querySelector('#view-top').setAttribute('aria-pressed',String(isTop));};
+ function zoom(factor){stopFilm();setAutoRotate(false);desiredZoom=THREE.MathUtils.clamp(desiredZoom*factor,.75,2);}
  document.querySelector('#zoom-in').onclick=()=>zoom(1.2);document.querySelector('#zoom-out').onclick=()=>zoom(1/1.2);
- film.onclick=()=>{if(flyover){stopFilm();tween=null;return;}if(reduced.matches)return;flyover={age:0};lastShot=-1;desiredZoom=1;isTop=false;document.querySelector('#view-top').setAttribute('aria-pressed','false');film.textContent='Stop flyover';film.setAttribute('aria-pressed','true');host.dataset.flyover='playing';};
- function motionPreference(){film.disabled=reduced.matches;film.textContent=reduced.matches?'Reduced motion':'Play flyover';if(reduced.matches){stopFilm();tween=null;film.textContent='Reduced motion';}}
+ film.onclick=()=>{if(flyover){stopFilm();tween=null;return;}if(reduced.matches)return;setAutoRotate(false);flyover={age:0};lastShot=-1;desiredZoom=1;isTop=false;document.querySelector('#view-top').setAttribute('aria-pressed','false');film.textContent='Stop flyover';film.setAttribute('aria-pressed','true');host.dataset.flyover='playing';};
+ function motionPreference(){film.disabled=reduced.matches;setAutoRotate(false);film.textContent=reduced.matches?'Reduced motion':'Play flyover';if(reduced.matches){stopFilm();tween=null;film.textContent='Reduced motion';}}
  reduced.addEventListener('change',motionPreference);motionPreference();
  function resize(){const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();reset(true);}
  new ResizeObserver(resize).observe(host);resize();
@@ -98,7 +101,7 @@ export function createExperience({host,labels,onSelect}) {
  return {update({closed,selected:next,threshold,result,route}){const changed=selected!==next;selected=next;closure.visible=closed;for(const part of bridgeParts)part.visible=!closed;
   for(const n of result.communities){rings[n.id].material.color.set(n.id===selected?'#ffd090':n.minutes<=threshold?'#c6e6a0':'#4b6657');rings[n.id].scale.setScalar(n.id===selected?1.2:1);}
   for(const a of anchors){if(!a.node.clinic){a.label.setAttribute('aria-pressed',String(a.node.id===selected));a.label.classList.toggle('selected',a.node.id===selected);}a.label.classList.toggle('mobile-secondary',!a.node.clinic&&a.node.id!==selected);}
-  const nextKey=route.path.join('-');host.dataset.scenario=closed?'closed':'open';if(nextKey===routeKey)return;routeKey=nextKey;stopFilm();routeAge=0;
+  const nextKey=route.path.join('-');host.dataset.scenario=closed?'closed':'open';if(nextKey===routeKey)return;routeKey=nextKey;stopFilm();setAutoRotate(false);routeAge=0;
   if(changed&&!isTop){const target=point(byId[selected]).multiplyScalar(.2);moveTo(overview().add(target),target,1.6);}
   if(ghost){world.remove(ghost);ghost.geometry.dispose();ghost.material.dispose();ghost=null;}
   if(routeMesh){if(reduced.matches){world.remove(routeMesh);routeMesh.geometry.dispose();}else{ghost=routeMesh;ghost.material=gold.clone();ghost.material.transparent=true;ghost.material.depthWrite=false;ghost.material.opacity=.45;ghostAge=0;}}routePoints=[];
