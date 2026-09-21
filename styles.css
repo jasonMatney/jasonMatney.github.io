@@ -299,3 +299,17 @@ a:focus-visible {
     padding: 1.35rem 1.5rem;
   }
 }
+
+/* Tight list inside work cards (prototype bullets) */
+.work-item .plain-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.work-item .plain-list li {
+  margin-bottom: 0.35rem;
+}
+
+.work-item .plain-list li:last-child {
+  margin-bottom: 0;
+}

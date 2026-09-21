@@ -1,6 +1,6 @@
 # jasonMatney.github.io
 
-Personal site for **Jason Matney, Ph.D.** — Director of Data Visualization & Analytics.
+Personal site for **Jason Matney, Ph.D.** — Director, Data Visualization & Analytics.
 
 Live URL: [https://jasonmatney.github.io/](https://jasonmatney.github.io/)
 
@@ -34,25 +34,7 @@ GitHub Pages serves these from the `main` branch, `/` (root).
 3. Branch: **main**, folder: **/ (root)**.
 4. Save. The site publishes at `https://jasonmatney.github.io/`.
 
-Equivalent API (legacy source):
-
-```bash
-gh api -X POST repos/jasonMatney/jasonMatney.github.io/pages \
-  -f build_type=legacy \
-  -f source[branch]=main \
-  -f source[path]=/
-```
-
-If Pages already exists, update instead of create:
-
-```bash
-gh api -X PUT repos/jasonMatney/jasonMatney.github.io/pages \
-  -f build_type=legacy \
-  -f source[branch]=main \
-  -f source[path]=/
-```
-
 ## Notes
 
 - Phone number is intentionally omitted from the public site.
-- LinkedIn was not in the source resume shared for this build; add a link in the hero/social row of `index.html` if desired.
+- Contact links: email, [LinkedIn](https://www.linkedin.com/in/jason-matney-51714259/), and GitHub.
