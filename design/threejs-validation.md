@@ -7,3 +7,7 @@
 - Approximate cover height: desktop 452 px versus the old 680 px minimum; mobile 489 px versus the old 780 px minimum.
 - Browser rendering sample: roughly 191 render calls, 40,000 triangles, and a 16.7 ms average animation interval in the Codex browser during interaction. Pixel ratio capped at 1.5; shadows 1024 px. These are local browser observations, not a hardware GPU benchmark or a guarantee for mobile devices.
 - WebGL initialization/context-loss fallback is implemented; actual GPU context loss was not induced during browser QA.
+
+## Cinematic motion update
+
+Added eased, interruptible camera transitions; damped zoom; three-shot flyover; route draw-on and crossfade; an arc-length route marker; and animated water normals. Fixed a visibility-observer issue that could leave an onscreen scene paused. Cached static shadows reduce the observed steady-state render count from about 191 to 119; local browser animation intervals measured 16.7 ms during the flyover (not a hardware/mobile benchmark).
