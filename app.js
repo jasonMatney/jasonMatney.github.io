@@ -31,8 +31,13 @@ for(const n of nodes){const g=el('g',n.clinic?{}:{class:'map-node',tabindex:0,ro
 }
 map.append(closure);
 let closed=false;
+let experience=null;
+function selectCommunity(id){$('#community').value=id;render();}
+const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting))return;observer.disconnect();try{const {createExperience}=await import('./experience.js?v=1');experience=createExperience({host:$('#scene-3d'),labels:$('#scene-labels'),onSelect:selectCommunity});render();}catch(error){console.warn('3D view unavailable; using accessible map.',error);$('#scene-status').textContent='3D unavailable on this device. The map and access controls remain available.';}},{rootMargin:'300px'});
+observer.observe($('#simulation'));
 function render(){
  const threshold=Number($('#threshold').value), selected=$('#community').value, result=analyze(closed,threshold), route=shortestRoute(selected,closed),baseline=shortestRoute(selected,false);
+ experience?.update({closed,selected,threshold,result,route});
  $('#threshold-value').textContent=`${threshold} min`;$('#coverage').textContent=`${result.percent}%`;
  $('#route-summary').textContent=`${lookup[selected].name} → ${route.clinic}: ${route.minutes} minutes.`;
  const delta=route.minutes-baseline.minutes;

@@ -12,7 +12,9 @@ Run the network checks with `node --test tests/network.test.mjs`.
 
 - `index.html`: public biography, experience, contact, and accessible demonstration controls.
 - `styles.css`: responsive editorial design, reduced-motion support, and typography fallbacks.
-- `app.js`: original SVG cartography, controls, and accessible result updates.
+- `app.js`: cover cartography, analysis controls, lazy scene loading, SVG fallback, and accessible result updates.
+- `experience.js`: original Three.js landscape, camera controls, settlement selection, and live route rendering.
+- `vendor/three/`: pinned Three.js 0.186.0, OrbitControls, and MIT license.
 - `network.mjs`: synthetic graph and shortest-path analysis.
 - `tests/network.test.mjs`: route validity, known results, and coverage invariants.
 
@@ -21,3 +23,5 @@ Run the network checks with `node --test tests/network.test.mjs`.
 The map uses fictional places, populations, geometry, and fixed travel times. It is an original personal demonstration, not a federal deliverable or operational model. It does not use client source code or data. Professional experience is described at a high level. The Military OneSource link points to a public resource; its illustration is typographic, not an agency screenshot. No new performance or contract-value claims are introduced.
 
 The local `design/` folder contains the ImageGen visual reference and prompt; it is not required to serve the site. The actual site uses editable SVG and HTML, not a raster mockup.
+
+The 3D scene is loaded near the viewport and pauses rendering while offscreen. Rotation is opt-in on mobile; camera zoom, top view, and reset are explicit controls. The SVG map and travel-time table remain available when WebGL cannot initialize. Procedural terrain is illustrative and does not affect the fixed synthetic travel times.
