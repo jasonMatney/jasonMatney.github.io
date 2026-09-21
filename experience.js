@@ -55,7 +55,7 @@ export function createExperience({host,labels,onSelect}) {
  function interaction(value){controls.enabled=value;renderer.domElement.style.pointerEvents=value?'auto':'none';document.querySelector('#orbit-toggle').setAttribute('aria-pressed',String(value));status.textContent=value?'Drag to orbit · Select a community · Use + / − to zoom':'Select a community · Enable rotation to explore';}
  interaction(matchMedia('(pointer:fine) and (min-width:701px)').matches);
  let isTop=false;controls.addEventListener('start',()=>{isTop=false;document.querySelector('#view-top').setAttribute('aria-pressed','false');});function reset(){isTop=false;camera.position.set(32,65,overviewDepth());controls.target.set(0,0,0);camera.zoom=1;camera.updateProjectionMatrix();controls.update();document.querySelector('#view-top').setAttribute('aria-pressed','false');}
- function overviewDepth(){return Math.max(70,100/Math.max(.65,host.clientWidth/host.clientHeight));}
+ function overviewDepth(){return Math.max(70,120/Math.max(.6,host.clientWidth/host.clientHeight));}
  document.querySelector('#orbit-toggle').onclick=()=>interaction(!controls.enabled);
  document.querySelector('#view-reset').onclick=reset;
  document.querySelector('#view-top').onclick=()=>{isTop=!isTop;camera.position.set(isTop?0:32,isTop?Math.max(100,48/(Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect)):65,isTop ? .1 : overviewDepth());camera.zoom=1;camera.updateProjectionMatrix();controls.target.set(0,0,0);camera.lookAt(controls.target);document.querySelector('#view-top').setAttribute('aria-pressed',String(isTop));};
