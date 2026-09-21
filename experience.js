@@ -26,7 +26,8 @@ export function createExperience({host,labels,onSelect}) {
  const terrain=new THREE.PlaneGeometry(80,49,100,64);terrain.rotateX(-Math.PI/2);const pos=terrain.attributes.position,colors=[];
  for(let i=0;i<pos.count;i++){const x=pos.getX(i),z=pos.getZ(i),h=height(x,z);pos.setY(i,h);const c=new THREE.Color().setHSL(.25,.15,.42+h*.023);colors.push(c.r,c.g,c.b);}
  terrain.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));terrain.computeVertexNormals();const ground=new THREE.Mesh(terrain,landMat);ground.receiveShadow=true;world.add(ground);
- const base=new THREE.Mesh(new THREE.BoxGeometry(80,2.6,49),soil);base.position.y=-1.7;world.add(base);
+ // Keep the block top below the skirt so the two surfaces do not z-fight along the edge.
+ const base=new THREE.Mesh(new THREE.BoxGeometry(80,2.6,49),soil);base.position.y=-2.35;world.add(base);
  // Close the four exposed edges of the terrain block.
  const skirtPos=[],skirtIndex=[];for(const side of [0,1,2,3]){const start=skirtPos.length/3;for(let i=0;i<=100;i++){const t=i/100;const x=side===0?-40+80*t:side===1?40:side===2?40-80*t:-40;const z=side===0?-24.5:side===1?-24.5+49*t:side===2?24.5:24.5-49*t;skirtPos.push(x,height(x,z),z,x,-1,z);if(i<100){const a=start+i*2;skirtIndex.push(a,a+1,a+2,a+1,a+3,a+2);}}}
  const skirt=new THREE.BufferGeometry();skirt.setAttribute('position',new THREE.Float32BufferAttribute(skirtPos,3));skirt.setIndex(skirtIndex);skirt.computeVertexNormals();world.add(new THREE.Mesh(skirt,mat('#526b53',{side:THREE.DoubleSide})));

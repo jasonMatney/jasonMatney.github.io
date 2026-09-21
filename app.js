@@ -34,7 +34,7 @@ map.append(closure);
 let closed=false;
 let experience=null;
 function selectCommunity(id){$('#community').value=id;render();}
-const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting))return;observer.disconnect();try{const {createExperience}=await import('./experience.js?v=cinema3');experience=createExperience({host:$('#scene-3d'),labels:$('#scene-labels'),onSelect:selectCommunity});sceneStage.dataset.sceneState='ready';sceneStage.setAttribute('aria-busy','false');render();}catch(error){console.warn('3D view unavailable; using accessible map.',error);sceneStage.dataset.sceneState='fallback';sceneStage.setAttribute('aria-busy','false');$('#scene-status').textContent='3D unavailable on this device. The map and access controls remain available.';}},{rootMargin:'300px'});
+const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting))return;observer.disconnect();try{const {createExperience}=await import('./experience.js?v=cinema4');experience=createExperience({host:$('#scene-3d'),labels:$('#scene-labels'),onSelect:selectCommunity});sceneStage.dataset.sceneState='ready';sceneStage.setAttribute('aria-busy','false');render();}catch(error){console.warn('3D view unavailable; using accessible map.',error);sceneStage.dataset.sceneState='fallback';sceneStage.setAttribute('aria-busy','false');$('#scene-status').textContent='3D unavailable on this device. The map and access controls remain available.';}},{rootMargin:'300px'});
 observer.observe($('#simulation'));
 function render(){
  const threshold=Number($('#threshold').value), selected=$('#community').value, result=analyze(closed,threshold), route=shortestRoute(selected,closed),baseline=shortestRoute(selected,false);
