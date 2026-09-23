@@ -126,3 +126,11 @@
 .story-progress button{font-size:11px}
 @media(max-width:1000px){.highlights{grid-template-columns:1fr 1fr 1fr}.highlights>.eyebrow{grid-column:1/-1;padding:17px 0 10px}.highlights a:first-of-type{border-left:0}.highlights a{min-height:115px}.case-copy{padding:23px}}
 @media(max-width:700px){.header nav{font-size:12px;gap:10px}.eyebrow{font-size:10px}.highlights{display:block;margin-bottom:0}.highlights>.eyebrow{padding:18px 0 8px}.highlights>.eyebrow br{display:none}.highlights>.eyebrow span{margin-left:5px}.highlights a{min-height:0;padding:13px 0;border-left:0;border-top:1px solid var(--line)}.highlights strong{font-size:22px}.highlights small{font-size:12px}.case-grid{grid-template-columns:1fr;gap:20px}.case-copy{padding:22px}.case-copy h3{font-size:31px}.case-copy>p:not(.eyebrow):not(.caption){font-size:14px}.case-details p{font-size:12px}.case-details strong{min-width:0;margin-right:6px}.scene-tools button{font-size:10px;min-height:38px}.legend{font-size:10px}.map-disclaimer,.scene-status{font-size:10px}.place-label{font-size:11px}.story-progress button{font-size:10px}}
+
+/* Give the opening its own viewport; the work index begins on the next scroll. */
+.hero{min-height:max(620px,calc(100vh - 78px));min-height:max(620px,calc(100svh - 78px))}
+.hero-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:64px 0 104px}
+.hero-scroll{position:absolute;z-index:2;left:48px;bottom:26px;display:inline-flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--accent);font-size:11px;font-weight:600;letter-spacing:.4px}
+.hero-scroll span{font-size:17px;line-height:1;color:var(--accent)}
+@media(max-width:1000px){.hero-scroll{left:30px}}
+@media(max-width:700px){.hero{display:flex;align-items:flex-start;min-height:max(620px,calc(100vh - 94px));min-height:max(620px,calc(100svh - 94px))}.hero-copy{width:100%;justify-content:flex-start;padding:clamp(48px,8svh,80px) 0 105px}.hero-scroll{left:23px;bottom:22px}}
