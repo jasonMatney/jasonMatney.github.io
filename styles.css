@@ -24,3 +24,33 @@
 @media(max-width:1000px) and (min-width:701px){.wordmark{font-size:26px}.featured-project{gap:30px}}
 @media(max-width:700px){.wordmark{font-size:25px}.featured-project{display:block;padding:28px 0;margin-bottom:42px}.project-signal{min-height:120px;margin-bottom:23px;font-size:27px}.project-signal:before{inset:14px 10px}.project-signal:after{width:94px;height:94px}.featured-project h3{font-size:38px;margin-top:6px}.featured-project-lede{font-size:15px}.project-tags{margin-top:19px}}
 .project-name{font-size:11px;line-height:1.3;letter-spacing:2px;text-transform:uppercase;font-weight:600;color:var(--accent);margin:-5px 0 17px}.project-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid #b5bfae;border-bottom:1px solid #b5bfae;margin-top:25px}.project-steps>div{padding:14px 14px 14px 0;border-right:1px solid #b5bfae}.project-steps>div+div{padding-left:14px}.project-steps>div:last-child{border-right:0}.project-steps span{display:block;font:italic 13px var(--serif);color:var(--accent);margin-bottom:7px}.project-steps strong{display:block;font:24px/1 var(--serif);font-weight:400}.project-steps p{font-size:11px;line-height:1.4;color:#536050;margin-top:6px}.featured-project em{color:#62765e}@media(max-width:700px){.project-steps{grid-template-columns:1fr;margin-top:22px}.project-steps>div,.project-steps>div+div{padding:12px 0;border-right:0;border-bottom:1px solid #b5bfae}.project-steps>div:last-child{border-bottom:0}.project-steps span{display:inline-block;width:34px;margin:0}.project-steps strong{display:inline-block}.project-steps p{display:inline-block;margin:0 0 0 8px}}
+
+/* The journey is presented as editorial captions over the living atlas. */
+.scene-stage{isolation:isolate;background:#122f2a}
+.scene-stage:before{pointer-events:none}
+.scene-stage:after{z-index:1;box-shadow:inset 0 0 100px #061b1960,inset 0 -45px 70px #071d1b55}
+.map-topline{position:relative;z-index:4}
+.story-panel{position:absolute;z-index:4;top:24px;left:28px;width:min(335px,43%);padding:15px 18px 17px;color:#f8f2df;background:linear-gradient(110deg,#0e2a26f2,#16362dd9 85%,#16362d99);border-left:2px solid #f3be82;box-shadow:0 16px 50px #071c1a44;backdrop-filter:blur(7px)}
+.story-panel[hidden]{display:none}
+.story-kicker{font:600 9px/1.3 var(--sans);letter-spacing:2px;text-transform:uppercase;color:#f1ba80;margin:0 0 8px}
+.story-panel h3{font:italic 28px/1.05 var(--serif);letter-spacing:-.5px;margin:0 0 10px;color:#fff7e6}
+.story-panel>p:not(.story-kicker){font:12px/1.5 var(--sans);color:#d9e4d5;margin:0 0 10px;max-width:29ch}
+.story-measure{display:inline-flex;align-items:center;min-height:24px;color:#ffd29c;font:600 12px/1.2 var(--sans);border-top:1px solid #9faf9670;padding-top:8px}
+.story-progress{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:14px}
+.story-progress button{border:0;border-top:2px solid #779185;background:none;color:#c9d7c7;text-align:left;font:8px/1.3 var(--sans);padding:7px 0 0;cursor:pointer}
+.story-progress button[aria-current=step]{border-color:#f0b77c;color:#fff6e6}
+.scene-stage[data-scene-state=ready] .scene-status{color:#dce6d5}
+.scene-tools #play-flyover{font-weight:700;letter-spacing:.2px}
+.place-label{background:#15352de8;box-shadow:0 3px 12px #081e1a80;border-color:#d9e4c777;text-shadow:0 1px 2px #061a16}
+.place-label.selected{box-shadow:0 0 0 3px #ffc47a55,0 4px 20px #071b18aa;text-shadow:none}
+@media(max-width:700px){.scene-stage{min-height:440px}.story-panel{top:18px;left:14px;width:calc(100% - 28px);padding:12px 14px 14px}.story-panel h3{font-size:22px;max-width:21ch}.story-panel>p:not(.story-kicker){font-size:11px;line-height:1.4;max-width:31ch}.story-measure{font-size:11px}.story-progress{margin-top:10px}.story-progress button{font-size:8px}.scene-tools{bottom:32px}.scene-status{bottom:8px}}
+
+.story-panel{top:0;left:0;right:0;width:auto;min-height:165px;padding:22px 28px 25px;border:0;border-bottom:1px solid #afbb9b55;box-shadow:none;background:linear-gradient(180deg,#0e2a26f8 0%,#113029e8 70%,#11302900 100%);backdrop-filter:none}
+.story-panel h3{max-width:470px;font-size:29px;line-height:1.08;margin-bottom:6px}
+.story-panel>p:not(.story-kicker){max-width:52ch}
+.story-measure{position:absolute;right:28px;top:55px;max-width:180px;text-align:right;font-size:14px;border:0;color:#ffcf98}
+.story-progress{max-width:430px;margin-top:12px}
+@media(max-width:700px){.scene-stage{min-height:470px}.story-panel{top:0;left:0;right:0;width:auto;min-height:184px;padding:16px 15px 20px}.story-panel h3{font-size:22px;max-width:24ch;margin-bottom:6px}.story-panel>p:not(.story-kicker){font-size:10px;max-width:39ch;margin-bottom:5px}.story-measure{position:static;font-size:11px;padding-top:3px;min-height:18px}.story-progress{margin-top:8px}.story-progress button{font-size:8px}}
+.story-measure.impact{font:italic 29px/1 var(--serif);letter-spacing:-.8px;color:#ffd094}
+.story-progress button{font-size:10px}
+@media(max-width:700px){.story-panel h3{font-size:24px}.story-panel>p:not(.story-kicker){font-size:11px}.story-measure.impact{font-size:21px;max-width:none;text-align:left}.story-progress button{font-size:9px}}

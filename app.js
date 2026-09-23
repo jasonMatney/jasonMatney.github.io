@@ -33,8 +33,8 @@ for(const n of nodes){const g=el('g',n.clinic?{}:{class:'map-node',tabindex:0,ro
 map.append(closure);
 let closed=false;
 let experience=null;
-function selectCommunity(id){$('#community').value=id;render();}
-const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting))return;observer.disconnect();try{const {createExperience}=await import('./experience.js?v=cinema4');experience=createExperience({host:$('#scene-3d'),labels:$('#scene-labels'),onSelect:selectCommunity});sceneStage.dataset.sceneState='ready';sceneStage.setAttribute('aria-busy','false');render();}catch(error){console.warn('3D view unavailable; using accessible map.',error);sceneStage.dataset.sceneState='fallback';sceneStage.setAttribute('aria-busy','false');$('#scene-status').textContent='3D unavailable on this device. The map and access controls remain available.';}},{rootMargin:'300px'});
+function selectCommunity(id){experience?.stopStory();$('#community').value=id;render();}
+const observer=new IntersectionObserver(async entries=>{if(!entries.some(e=>e.isIntersecting))return;observer.disconnect();try{const {createExperience}=await import('./experience.js?v=story1');experience=createExperience({host:$('#scene-3d'),labels:$('#scene-labels'),onSelect:selectCommunity,onStoryStart:()=>{closed=false;$('#community').value='D';$('#threshold').value='15';render();},onStoryScenario:value=>{closed=value;render();}});sceneStage.dataset.sceneState='ready';sceneStage.setAttribute('aria-busy','false');render();}catch(error){console.warn('3D view unavailable; using accessible map.',error);sceneStage.dataset.sceneState='fallback';sceneStage.setAttribute('aria-busy','false');$('#scene-status').textContent='3D unavailable on this device. The map and access controls remain available.';}},{rootMargin:'300px'});
 observer.observe($('#simulation'));
 function render(){
  const threshold=Number($('#threshold').value), selected=$('#community').value, result=analyze(closed,threshold), route=shortestRoute(selected,closed),baseline=shortestRoute(selected,false);
@@ -52,6 +52,6 @@ function render(){
  $('#travel-table').replaceChildren(...result.communities.map(n=>{const tr=document.createElement('tr');for(const value of[n.name,n.population.toLocaleString(),`${n.minutes} min`,n.minutes<=threshold?'Yes':'No']){const td=document.createElement('td');td.textContent=value;tr.append(td);}return tr;}));
  $('#map-desc').textContent=`Fictional Cedar Bay. ${closed?'Bridge closed.':'All roads open.'} ${lookup[selected].name} reaches ${route.clinic} in ${route.minutes} minutes. ${result.percent}% of residents are within the ${threshold}-minute target. Travel times are also listed in the method table.`;
 }
-for(const b of document.querySelectorAll('[data-scenario]'))b.addEventListener('click',()=>{closed=b.dataset.scenario==='closed';render();});
-$('#community').addEventListener('change',render);$('#threshold').addEventListener('input',render);$('#reset').addEventListener('click',()=>{closed=false;$('#community').value='D';$('#threshold').value='15';render();});
+for(const b of document.querySelectorAll('[data-scenario]'))b.addEventListener('click',()=>{experience?.stopStory();closed=b.dataset.scenario==='closed';render();});
+$('#community').addEventListener('change',()=>{experience?.stopStory();render();});$('#threshold').addEventListener('input',()=>{experience?.stopStory();render();});$('#reset').addEventListener('click',()=>{experience?.stopStory();closed=false;$('#community').value='D';$('#threshold').value='15';render();});
 $('#year').textContent=new Date().getFullYear();render();
