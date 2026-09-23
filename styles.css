@@ -54,3 +54,18 @@
 .story-measure.impact{font:italic 29px/1 var(--serif);letter-spacing:-.8px;color:#ffd094}
 .story-progress button{font-size:10px}
 @media(max-width:700px){.story-panel h3{font-size:24px}.story-panel>p:not(.story-kicker){font-size:11px}.story-measure.impact{font-size:21px;max-width:none;text-align:left}.story-progress button{font-size:9px}}
+
+/* Lead with the person and role before the portfolio examples. */
+.hero-copy{padding-top:55px;padding-bottom:48px}
+.hero h1{font-size:clamp(58px,5.8vw,82px);line-height:1;letter-spacing:-3.5px;white-space:nowrap;max-width:none;margin:16px 0 18px}
+.hero h1>.degree{font-size:.45em;letter-spacing:-.5px;color:#61745f;margin-left:6px}
+.hero-role{border-left:2px solid var(--accent);padding-left:15px;font:600 13px/1.5 var(--sans);letter-spacing:.15px;margin:0 0 26px;color:var(--ink)}
+.hero-role span{font-weight:400;color:#596755}
+.hero-statement{font:400 clamp(31px,3.3vw,46px)/1.12 var(--serif);letter-spacing:-1.4px;max-width:625px;margin:0 0 16px}
+.hero-statement em{color:#657863}
+.hero .lede{font-size:16px;max-width:490px}
+.hero-actions{margin-top:23px}
+.work.section{padding-top:72px}
+.work .section-intro h2{font-size:clamp(40px,4.3vw,57px)}
+@media(max-width:1000px) and (min-width:701px){.hero h1{font-size:clamp(48px,5.4vw,60px);white-space:normal}.hero-statement{font-size:clamp(30px,3.7vw,39px)}.hero-copy{padding-top:40px}}
+@media(max-width:700px){.hero-copy{padding-top:30px;padding-bottom:35px}.hero h1{font-size:clamp(48px,12vw,60px);white-space:normal;letter-spacing:-2.7px;line-height:1.02;margin:14px 0 15px}.hero h1>.degree{display:block;font-size:.46em;margin:4px 0 0;letter-spacing:0}.hero h1 .degree-comma{display:none}.hero-role{font-size:12px;margin-bottom:23px}.hero-statement{font-size:clamp(31px,8.3vw,39px);letter-spacing:-1px;margin-bottom:14px}.hero .lede{font-size:15px}.hero-actions{margin-top:23px}.work.section{padding-top:50px}.work .section-intro h2{font-size:40px}}
