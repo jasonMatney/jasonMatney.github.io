@@ -10,7 +10,8 @@ Run the network checks with `node --test tests/network.test.mjs`.
 
 ## Contents
 
-- `index.html`: public biography, experience, contact, and accessible demonstration controls.
+- `index.html`: public biography, selected work, contact, and accessible demonstration controls.
+- `assets/*dashboard.jpg`: September 2026 captures of the public Military OneSource and SAMHSA dashboards, each linked to its source and labeled with the scope of Jason's role.
 - `styles.css`: responsive editorial design, reduced-motion support, and typography fallbacks.
 - `app.js`: cover cartography, analysis controls, lazy scene loading, SVG fallback, and accessible result updates.
 - `app.bundle.js`: single classic-script build of `app.js`, `experience.js`, and their local dependencies for direct-file compatibility.
@@ -27,7 +28,7 @@ npx --yes esbuild@0.25.12 app.js --bundle --format=iife --platform=browser --tar
 
 ## Content boundaries
 
-The map uses fictional places, populations, geometry, and fixed travel times. It is an original personal demonstration, not a federal deliverable or operational model. It does not use client source code or data. Professional experience is described at a high level. The Military OneSource link points to a public resource; its illustration is typographic, not an agency screenshot. No new performance or contract-value claims are introduced.
+The map uses fictional places, populations, geometry, and fixed travel times. It is an original personal demonstration, not a federal deliverable or operational model. It does not use client source code or data. Professional experience is described at a high level, using role summaries from the public résumé. The Military OneSource and 988 images are captures of public dashboards; the page links to the source sites and separates current public content from past roles. No new performance or contract-value claims are introduced.
 
 The local `design/` folder contains the ImageGen visual reference and prompt; it is not required to serve the site. The actual site uses editable SVG and HTML, not a raster mockup.
 
