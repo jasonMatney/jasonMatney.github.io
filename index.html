@@ -12,9 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jasonmatney.github.io/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=georad2">
-  <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
-  <script type="module" src="app.js?v=story1"></script>
+  <link rel="stylesheet" href="styles.css?v=filefix1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -75,5 +73,23 @@
     <section id="contact" class="contact"><div class="wrap"><p class="eyebrow">04 / Start a conversation</p><h2>Let’s put a better<br><em>question on the map.</em></h2><div class="contact-bottom"><p>Geospatial analytics. Applied AI. Technical leadership.<br>Based in Washington, DC.</p><a href="mailto:jamatney@gmail.com">jamatney@gmail.com <span aria-hidden="true">↗</span></a></div></div></section>
   </main>
   <footer class="wrap"><p>© <span id="year">2026</span> Jason Matney</p><p>Personal website. Views and demonstrations are my own.</p><div><a href="assets/Jason_Matney_Resume.pdf" download="Jason_Matney_Resume.pdf">Résumé (PDF) ↓</a><a href="https://www.linkedin.com/in/jason-matney-51714259/">LinkedIn ↗</a><a href="https://github.com/jasonMatney">GitHub ↗</a></div></footer>
+  <script src="app.bundle.js?v=filefix1"></script>
+  <script>
+    const stage = document.querySelector('.scene-stage');
+    const loadingWatchdog = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      loadingWatchdog.disconnect();
+      setTimeout(() => {
+        if (stage.dataset.sceneState !== 'loading') return;
+        stage.dataset.sceneState = 'error';
+        stage.setAttribute('aria-busy', 'false');
+        const link = document.createElement('a');
+        link.href = 'https://jasonmatney.github.io/#explore';
+        link.textContent = 'Open the live demo ↗';
+        document.querySelector('#scene-status').replaceChildren('The preview could not start. ', link);
+      }, 10000);
+    }, {rootMargin: '100px'});
+    loadingWatchdog.observe(stage);
+  </script>
 </body>
 </html>

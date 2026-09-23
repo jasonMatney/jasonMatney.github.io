@@ -4,7 +4,7 @@ An editorial atlas portfolio with an independent, synthetic road-access demonstr
 
 ## Run locally
 
-Serve the repository with any static HTTP server, for example `python3 -m http.server 8000`. JavaScript modules require HTTP rather than opening the file directly.
+Open `index.html` directly or serve the repository with any static HTTP server, for example `python3 -m http.server 8000`. The checked-in classic script bundle makes the interactive demo work from a local file as well as GitHub Pages.
 
 Run the network checks with `node --test tests/network.test.mjs`.
 
@@ -13,10 +13,17 @@ Run the network checks with `node --test tests/network.test.mjs`.
 - `index.html`: public biography, experience, contact, and accessible demonstration controls.
 - `styles.css`: responsive editorial design, reduced-motion support, and typography fallbacks.
 - `app.js`: cover cartography, analysis controls, lazy scene loading, SVG fallback, and accessible result updates.
+- `app.bundle.js`: single classic-script build of `app.js`, `experience.js`, and their local dependencies for direct-file compatibility.
 - `experience.js`: original Three.js landscape, camera controls, settlement selection, and live route rendering.
 - `vendor/three/`: pinned Three.js 0.186.0, OrbitControls, and MIT license.
 - `network.mjs`: synthetic graph and shortest-path analysis.
 - `tests/network.test.mjs`: route validity, known results, and coverage invariants.
+
+After changing `app.js`, `experience.js`, `network.mjs`, or the vendored Three.js modules, rebuild `app.bundle.js` with:
+
+```sh
+npx --yes esbuild@0.25.12 app.js --bundle --format=iife --platform=browser --target=es2020 --minify --alias:three=./vendor/three/three.module.js --outfile=app.bundle.js
+```
 
 ## Content boundaries
 
