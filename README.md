@@ -10,12 +10,12 @@ Open `index.html` directly or serve the repository with any static HTTP server, 
 
 - `index.html`: positioning, selected work, rapid-prototype record, public reporting, the segmentation demonstration, and contact.
 - `styles.css`: responsive editorial design, reduced-motion support, and typography fallbacks.
-- `app.js`: cover cartography, hero footprint overlay, and lazy loading of the demonstration.
+- `app.js`: hero terrain and footprint overlay, and lazy loading of the demonstration.
 - `app.bundle.js`: single classic-script build of `app.js`, `geoai.js`, and their dependencies for direct-file compatibility.
 - `geoai.js`: the interactive viewer — thresholding, overlay compositing, and live precision/recall/IoU.
 - `assets/geoai/`: held-out imagery, model probability rasters, label rasters, and the metric sweep.
 - `assets/*dashboard.jpg`: September 2026 captures of the public Military OneSource and SAMHSA dashboards, each linked to its source and labeled with the scope of Jason's role.
-- `tools/geoai/`: the acquisition, training, and export scripts that produced the demonstration assets.
+- `tools/geoai/`: the acquisition, training, export, and hero-terrain scripts that produced the demonstration assets.
 
 After changing `app.js`, `geoai.js`, or their dependencies, rebuild `app.bundle.js` with:
 
@@ -35,7 +35,7 @@ A compact U-Net trained from scratch to segment building footprints from aerial 
 - **Training** — 256 px tiles, flip and rotation augmentation, combined binary cross-entropy and Dice objective.
 - **In the browser** — probability rasters are precomputed and shipped as 8-bit PNGs. Thresholding and every metric in the panel are computed client-side from the model's actual output against the held-out labels. Nothing in the readout is hard-coded.
 
-Regenerate the assets with `python3 tools/geoai/acquire.py`, then `train.py`, then `export_assets.py`.
+Regenerate the assets with `python3 tools/geoai/acquire.py`, then `train.py`, then `export_assets.py`. `hero_terrain.py` fetches USGS 3DEP elevation for the same extent as the hero footprints and writes real 2.5 m contours, so the terrain and the predicted buildings share one coordinate frame rather than the decorative contours the cover previously used. `make_og.py` builds the social card from those same layers.
 
 ### Honest limits
 
