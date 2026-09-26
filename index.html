@@ -11,8 +11,13 @@
   <meta property="og:description" content="Geospatial computer vision from research to production. Island-scale feature extraction, production ML pipelines, and rapid GIS/AI prototypes for federal missions.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jasonmatney.github.io/">
+  <meta property="og:image" content="https://jasonmatney.github.io/assets/og-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jason Matney, Ph.D. — geospatial computer vision, research to production.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=geoai1">
+  <link rel="stylesheet" href="styles.css?v=geoai2">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -28,7 +33,7 @@
         <div class="hero-actions"><a class="button" href="#work">See the work <span aria-hidden="true">↗</span></a><a class="text-link" href="#prototypes">Prototypes I've shipped <span aria-hidden="true">↗</span></a></div>
         <p class="hero-meta">Director, Data Visualization &amp; Analytics at ICF<br>Washington, DC · Open to remote</p>
       </div>
-      <div class="hero-atlas" aria-hidden="true"><svg id="hero-map" viewBox="0 0 650 720" preserveAspectRatio="xMidYMid slice"></svg><div class="atlas-note"><span>01 — Method</span><p>Model outputs,<br>at geographic scale.</p></div><div class="atlas-caption">Conceptual terrain · An exploration of connections</div></div>
+      <div class="hero-atlas" aria-hidden="true"><svg id="hero-map" viewBox="0 0 650 720" preserveAspectRatio="xMidYMid slice"></svg><div class="atlas-note"><span>01 — Output</span><p>Every rooftop here<br>was found by a model.</p></div><div class="atlas-caption" id="hero-footprint-note">Predicted building footprints · USGS orthoimagery</div></div>
       <a class="hero-scroll" href="#work">Scroll to selected work <span aria-hidden="true">↓</span></a>
     </section>
     <section class="expertise wrap" aria-label="Credentials at a glance">
@@ -112,33 +117,40 @@
         </article>
       </div>
     </section>
-    <section id="explore" class="explore" aria-labelledby="explore-title"><div class="wrap">
-      <div class="section-intro"><div><p class="eyebrow">04 / Independent demonstration</p><h2 id="explore-title">When a road closes,<br><em>access changes.</em></h2></div><div class="intro-aside"><span class="badge">Built for this site</span><p>A network accessibility model on synthetic data: shortest-path routing from six communities to two clinics, recomputed when a bridge closes. Built to show how I make a spatial model legible to someone who has to decide something.</p></div></div>
-      <div class="simulation" id="simulation">
-        <div class="map-panel"><div class="map-topline"><span>CEDAR BAY / FICTIONAL REGION</span><span aria-hidden="true">AN ATLAS OF ACCESS</span></div><div class="scene-stage" data-scene-state="loading" aria-busy="true"><div id="scene-3d" role="img" aria-label="Interactive three-dimensional Cedar Bay landscape"></div><div class="scene-labels" id="scene-labels"></div><svg id="network-map" viewBox="0 0 800 490" role="group" aria-labelledby="map-title map-desc"><title id="map-title">Cedar Bay road access demonstration</title><desc id="map-desc">A fictional network of six communities and two clinics. The table below provides equivalent travel times.</desc></svg><div class="story-panel" id="story-panel" hidden aria-live="polite"><p id="story-kicker" class="story-kicker"></p><h3 id="story-title"></h3><p id="story-copy"></p><div id="story-measure" class="story-measure"></div><div class="story-progress" id="story-progress" aria-label="Story chapters"></div></div><div class="scene-tools" aria-label="3D view controls" hidden><button id="orbit-toggle" type="button" aria-pressed="false">Rotate scene</button><button id="view-top" type="button" aria-pressed="false">Top view</button><button id="zoom-in" type="button" aria-label="Zoom in">+</button><button id="zoom-out" type="button" aria-label="Zoom out">−</button><button id="view-reset" type="button" aria-label="Reset camera">↺</button></div><p id="scene-status" class="scene-status" role="status">Preparing the 3D atlas…</p></div><div class="legend"><span><i class="legend-dot"></i> Community</span><span><i class="legend-clinic">+</i> Clinic</span><span><i class="legend-line"></i> Selected route</span><span><i class="legend-closed">×</i> Closure</span></div><p class="map-disclaimer">Illustrative terrain · All places, people, and travel times are synthetic</p></div>
-        <div class="controls"><p class="eyebrow">Explore a scenario</p><h3>What stays within reach?</h3><fieldset><legend>1. Set road conditions</legend><div class="segmented"><button type="button" data-scenario="open" aria-pressed="true">Normal</button><button type="button" data-scenario="closed" aria-pressed="false">Bridge closed</button></div></fieldset><label for="community">2. Follow a community</label><select id="community"><option value="A">Cedar Point</option><option value="B">Pine Harbor</option><option value="C">North Ridge</option><option value="D" selected>Willow Bend</option><option value="E">Eastbank</option><option value="F">South Cove</option></select><label for="threshold">3. Set an access target <output id="threshold-value" for="threshold">15 min</output></label><input id="threshold" type="range" min="10" max="40" step="5" value="15"><div class="range-labels"><span>10 min</span><span>40 min</span></div><div class="results" aria-live="polite" aria-atomic="true"><div class="result-stat"><strong id="coverage">—</strong><span>of residents within target</span></div><p id="route-summary">Loading the network…</p><p id="scenario-insight"></p></div><button class="reset" type="button" id="reset">Reset exploration <span aria-hidden="true">↺</span></button></div>
+    <section id="explore" class="explore"><div class="wrap">
+      <div class="section-intro"><div><p class="eyebrow">04 / Independent demonstration</p><h2 id="explore-title">A model that finds buildings.<br><em>And where it doesn&rsquo;t.</em></h2></div><div class="intro-aside"><span class="badge">Real model · real imagery</span><p>I trained a U-Net to segment building footprints from public USGS orthoimagery, using OpenStreetMap footprints as labels across six Puerto Rico municipalities. It is scored here on two it never saw during training. Move the threshold and watch precision trade against recall.</p></div></div>
+      <div class="simulation geoai" id="geoai" data-loading="true">
+        <div class="map-panel"><div class="map-topline"><span>PUERTO RICO / USGS ORTHOIMAGERY</span><span aria-hidden="true">0.78 M/PX · HELD OUT</span></div>
+          <div class="geoai-stage">
+            <div class="geoai-canvas-wrap"><canvas id="geoai-canvas" role="img" aria-label="Aerial imagery with model-predicted building footprints overlaid"></canvas></div>
+          </div>
+          <div class="legend"><span><i class="geoai-swatch tp"></i> Found &amp; mapped</span><span><i class="geoai-swatch fp"></i> Model only</span><span><i class="geoai-swatch fn"></i> Mapped, missed</span></div>
+          <p class="map-disclaimer">Imagery: USGS The National Map orthoimagery (public domain) · Footprints © OpenStreetMap contributors (ODbL) · Independent work, no client data</p>
+        </div>
+        <div class="controls"><p class="eyebrow">Explore the output</p><h3>Where does it hold up?</h3>
+          <fieldset><legend>1. Held-out municipality</legend><div class="segmented"><button type="button" data-aoi="ponce" aria-pressed="true">Ponce</button><button type="button" data-aoi="guaynabo" aria-pressed="false">Guaynabo</button></div></fieldset>
+          <fieldset><legend>2. View</legend><div class="segmented"><button type="button" data-layer="imagery" aria-pressed="false">Imagery</button><button type="button" data-layer="prediction" aria-pressed="false">Prediction</button><button type="button" data-layer="agreement" aria-pressed="true">Agreement</button></div></fieldset>
+          <label for="geoai-threshold">3. Decision threshold <output id="geoai-threshold-value" for="geoai-threshold">0.50</output></label>
+          <input id="geoai-threshold" type="range" min="1" max="254" step="1" value="128">
+          <div class="range-labels"><span>Catch more</span><span>Be surer</span></div>
+          <div class="results" aria-live="polite" aria-atomic="true">
+            <div class="geoai-metrics"><div><strong id="geoai-precision">—</strong><span>Precision</span></div><div><strong id="geoai-recall">—</strong><span>Recall</span></div><div><strong id="geoai-iou">—</strong><span>IoU</span></div></div>
+            <p id="geoai-readout-note">Loading model output…</p>
+          </div>
+        </div>
       </div>
-      <noscript><p class="noscript">Enable JavaScript to explore the road network. This independent example uses synthetic data and does not represent an agency project.</p></noscript>
-      <details class="method"><summary>Behind the map: method, assumptions &amp; travel times <span aria-hidden="true">+</span></summary><div class="method-body"><p>This original demonstration calculates the shortest journey from each community to either clinic across an undirected road network. Closing the bridge removes one connection; route times and population coverage are recalculated. Coverage is the share of 10,000 synthetic residents whose nearest clinic is reachable within your selected target.</p><p>Travel times are fixed edge weights, not live traffic estimates. The model excludes clinic capacity, service eligibility, congestion, and uncertainty. Geography is schematic; no client data or project implementation is used.</p><div class="table-scroll"><table><caption>Nearest-clinic travel times for the selected scenario</caption><thead><tr><th scope="col">Community</th><th scope="col">Residents</th><th scope="col">Travel time</th><th scope="col">Within target</th></tr></thead><tbody id="travel-table"></tbody></table></div></div></details>
+      <noscript><p class="noscript">Enable JavaScript to explore the model output. This is independent work on public data and does not represent an agency project.</p></noscript>
+      <details class="method"><summary>Method, data, and what this model gets wrong <span aria-hidden="true">+</span></summary><div class="method-body">
+        <p><strong>Data.</strong> Eight 1.2&nbsp;km areas across Puerto Rico at 0.78&nbsp;m/px, from USGS The National Map orthoimagery, which is public domain. Labels are OpenStreetMap building footprints rasterised to the same grid. Six municipalities were used for training; Ponce and Guaynabo were held out entirely and are what you see above.</p>
+        <p><strong>Model.</strong> A compact U-Net trained from scratch on 256&nbsp;px tiles with flip and rotation augmentation, optimised on a combined binary cross-entropy and Dice objective. Every number in the panel is computed in your browser from the model&rsquo;s actual probability output against the held-out labels — nothing is hard-coded.</p>
+        <p><strong>What it gets wrong, and why that matters.</strong> The labels are not truth, they are OpenStreetMap. Where the map is incomplete, a correct detection is scored as a false positive — so the orange areas are a mix of genuine model error and buildings nobody has mapped yet. The model also struggles where rooftops share the spectral signature of pavement, under heavy tree cover, and along dense contiguous roofs where it merges neighbours into one blob. A production system would need higher-resolution imagery, multi-season capture, and human verification on the label set before any of it informed a real decision.</p>
+        <p>This is an independent demonstration built for this site. It uses no client data, no project code, and no federal deliverable.</p>
+      </div></details>
     </div></section>
     <section id="background" class="about section wrap" aria-labelledby="about-title"><div><p class="eyebrow">05 / Background</p><h2 id="about-title">From flood-risk models<br><em>to production AI.</em></h2><p class="about-lede">I'm Jason Matney, Director of Data Visualization &amp; Analytics at ICF. I set analytics and AI strategy for federal programs, lead teams of data scientists and engineers, and stay close enough to the code to be the one building when a program needs proof fast.</p><p>Before ICF, I led the GIS &amp; Analytics team at Dewberry, applying machine learning to national flood-risk models and designing Python and PostgreSQL ETL pipelines that cut large-scale geospatial processing time by more than 40%. My doctorate is in geospatial analytics; the through-line since has been getting models out of research and into something a decision depends on.</p><div class="toolset" aria-label="Tools and technologies"><span>Python</span><span>PyTorch</span><span>AWS</span><span>Docker</span><span>PostgreSQL</span><span>ArcGIS</span><span>Tableau</span></div></div><div class="education"><p class="eyebrow">Education</p><article><span>Ph.D.</span><div><h3>Geospatial Analytics</h3><p>North Carolina State University, 2019</p></div></article><article><span>M.S.</span><div><h3>Geography</h3><p>Michigan State University, 2014</p></div></article><article><span>B.A.</span><div><h3>Program in the Environment</h3><p>University of Michigan, 2009</p></div></article></div></section>
     <section id="contact" class="contact"><div class="wrap"><p class="eyebrow">06 / Contact</p><h2>Open to roles in<br><em>geospatial AI.</em></h2><div class="contact-bottom"><p>Applied AI and computer vision, at geographic scale.<br>Washington, DC, or remote. Active TS clearance.</p><a href="mailto:jamatney@gmail.com">jamatney@gmail.com <span aria-hidden="true">↗</span></a></div></div></section>
   </main>
   <footer class="wrap"><p>© <span id="year">2026</span> Jason Matney</p><p>Personal website. Views and demonstrations are my own.</p><div><a href="assets/Jason_Matney_Resume.pdf" download="Jason_Matney_Resume.pdf">Résumé (PDF) ↓</a><a href="https://www.linkedin.com/in/jason-matney-51714259/">LinkedIn ↗</a><a href="https://github.com/jasonMatney">GitHub ↗</a></div></footer>
-  <script src="app.bundle.js?v=filefix1"></script>
-  <script>
-    const stage = document.querySelector('.scene-stage');
-    const loadingWatchdog = new IntersectionObserver(entries => {
-      if (!entries.some(entry => entry.isIntersecting)) return;
-      loadingWatchdog.disconnect();
-      setTimeout(() => {
-        if (stage.dataset.sceneState !== 'loading') return;
-        stage.dataset.sceneState = 'fallback';
-        stage.setAttribute('aria-busy', 'false');
-        document.querySelector('#scene-status').textContent = 'The 3D view could not start. The map and access controls remain available.';
-      }, 10000);
-    }, {rootMargin: '100px'});
-    loadingWatchdog.observe(stage);
-  </script>
+  <script src="app.bundle.js?v=geoai2"></script>
 </body>
 </html>
