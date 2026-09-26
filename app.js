@@ -28,7 +28,7 @@ if (hero) {
     for (const p of t.paths) (p.i ? index : base).append(el('path', {d: p.d}));
     hero.append(base, index);
     const src = $('#hero-terrain-note');
-    if (src) src.textContent = `USGS 3DEP elevation · ${t.interval} m contours · ${t.min}–${t.max} m`;
+    if (src) src.textContent = `USGS 3DEP · ${t.interval} m contours · ${Math.round(t.min)}–${Math.round(t.max)} m`;
   }).catch(() => {});
 
   // Real building footprints predicted by the U-Net on held-out imagery.
