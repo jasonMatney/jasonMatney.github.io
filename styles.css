@@ -134,3 +134,8 @@
 .hero-scroll span{font-size:17px;line-height:1;color:var(--accent)}
 @media(max-width:1000px){.hero-scroll{left:30px}}
 @media(max-width:700px){.hero{display:flex;align-items:flex-start;min-height:max(620px,calc(100vh - 94px));min-height:max(620px,calc(100svh - 94px))}.hero-copy{width:100%;justify-content:flex-start;padding:clamp(48px,8svh,80px) 0 105px}.hero-scroll{left:23px;bottom:22px}}
+
+/* .method was styled for the dark explore panel; re-scope it for the light featured-project panel */
+.featured-project .method{border-bottom-color:#b5bfae}
+.featured-project .method summary{color:var(--ink)}
+.featured-project .method-body{color:#536050}
