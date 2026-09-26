@@ -156,3 +156,10 @@
 
 .atlas-caption #hero-footprint-note{color:var(--accent);font-weight:500}
 .atlas-caption .atlas-place{color:#7d8a7c}
+
+/* Active clearance is a gating credential for the defense and federal roles this site targets. */
+.clearance{display:inline-flex;align-items:center;gap:9px;margin-top:26px;padding:8px 14px;border:1px solid var(--accent);background:#b64e2510;color:var(--ink);font:600 10px/1 var(--sans);letter-spacing:1.4px;text-transform:uppercase}
+.clearance em{font-style:normal;color:var(--accent);margin:0 1px}
+.clearance-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+.expertise .cred-clearance p{font:600 12px/1.45 var(--sans);color:var(--accent);letter-spacing:.2px}
+@media(max-width:700px){.clearance{margin-top:20px;padding:7px 11px;font-size:9px;letter-spacing:1.1px}}
