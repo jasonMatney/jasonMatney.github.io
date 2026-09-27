@@ -437,6 +437,7 @@ function buildPerson(spec) {
     const L = side < 0 ? 'L' : 'R'; const sx = side * (shW - 6 * s), sy = shY + 14 * s, ex = side * (shW + 8 * s), ey = shY + 78 * s, wx = side * (shW + 10 * s), wy = shY + 140 * s;
     add('uarm' + L, dSeg(sx, sy, ex, ey), { stroke: spec.sleeve || spec.shirt, lw: aw * 1.12, cap: 'round', z: side < 0 ? 13 : 14, pivot: [sx, sy], parent: 'torso' });
     add('larm' + L, dSeg(ex, ey, wx, wy), { stroke: spec.longSleeve ? (spec.sleeve || spec.shirt) : skin, lw: aw, cap: 'round', z: side < 0 ? 13.1 : 14.1, pivot: [ex, ey], parent: 'uarm' + L });
+    if (spec.watch && side < 0) add('watch', dRound(wx - 12 * s, wy - 14 * s, 24 * s, 12 * s, 3 * s), { fill: '#2E3440', z: 13.15, parent: 'larmL' });
     add('hand' + L, dEll(wx, wy + 6 * s, 11 * s, 12.5 * s), { fill: skin, z: side < 0 ? 13.2 : 14.2, pivot: [wx, wy], parent: 'larm' + L });
   }
   const rig = { spec, parts: P, byId: {} }; P.forEach(p => { rig.byId[p.id] = p; p.path = p.d ? new ENV.Path2D(p.d) : null; });
@@ -451,6 +452,7 @@ function hairBack(sp, hy, hr, hry, s) {
     case 'afro': return dEll(0, hy - 10 * s, hr + 18 * s, hry + 14 * s);
     case 'kidCurls': return dEll(0, hy - 8 * s, hr + 7 * s, hry + 4 * s);
     case 'wrap': return dEll(0, hy - 16 * s, hr + 10 * s, hry + 10 * s);
+    case 'quiff': return dEll(0, hy - 10 * s, hr + 1.5 * s, hry - 3 * s);
     default: return dEll(0, hy - 6 * s, hr + 3 * s, hry + 1 * s);
   }
 }
@@ -458,6 +460,7 @@ function hairFront(sp, hy, hr, hry, s) {
   const top = hy - hry;
   switch (sp.hairStyle) {
     case 'curlyPony': return `M${-hr - 3 * s} ${hy - 4 * s}Q${-hr} ${top - 14 * s} 0 ${top - 10 * s}Q${hr + 2 * s} ${top - 12 * s} ${hr + 4 * s} ${hy - 6 * s}Q${hr - 6 * s} ${top + 16 * s} ${8 * s} ${top + 12 * s}Q${-6 * s} ${top + 22 * s} ${-hr + 6 * s} ${top + 22 * s}Q${-hr} ${hy - 12 * s} ${-hr - 3 * s} ${hy - 4 * s}Z`;
+    case 'quiff': return `M${-hr - 1 * s} ${hy - 2 * s}Q${-hr - 3 * s} ${top - 4 * s} ${-hr * .55} ${top - 14 * s}Q${-6 * s} ${top - 26 * s} ${hr * .55} ${top - 22 * s}Q${hr + 6 * s} ${top - 16 * s} ${hr + 1 * s} ${hy - 2 * s}Q${hr - 3 * s} ${top + 8 * s} ${hr * .5} ${top + 6 * s}Q${4 * s} ${top + 2 * s} ${-hr * .4} ${top + 9 * s}Q${-hr + 3 * s} ${top + 12 * s} ${-hr - 1 * s} ${hy - 2 * s}Z`;
     case 'short': return `M${-hr - 2 * s} ${hy - 6 * s}Q${-hr - 2 * s} ${top - 10 * s} 0 ${top - 9 * s}Q${hr + 2 * s} ${top - 10 * s} ${hr + 2 * s} ${hy - 6 * s}Q${hr - 6 * s} ${top + 12 * s} 0 ${top + 12 * s}Q${-hr + 6 * s} ${top + 12 * s} ${-hr - 2 * s} ${hy - 6 * s}Z`;
     case 'bun': return `M${-hr - 2 * s} ${hy - 2 * s}Q${-hr} ${top - 6 * s} 0 ${top - 5 * s}Q${hr} ${top - 6 * s} ${hr + 2 * s} ${hy - 2 * s}Q${hr - 8 * s} ${top + 14 * s} 0 ${top + 10 * s}Q${-hr + 8 * s} ${top + 14 * s} ${-hr - 2 * s} ${hy - 2 * s}Z`;
     case 'long': return `M${-hr - 4 * s} ${hy + 6 * s}Q${-hr - 2 * s} ${top - 10 * s} 0 ${top - 8 * s}Q${hr + 2 * s} ${top - 10 * s} ${hr + 4 * s} ${hy + 6 * s}Q${hr - 4 * s} ${top + 8 * s} ${-4 * s} ${top + 14 * s}Q${-hr + 6 * s} ${top + 14 * s} ${-hr - 4 * s} ${hy + 6 * s}Z`;
@@ -473,7 +476,7 @@ function initCast() {
   CAST.analyst = buildPerson({ name: 'ICF — analista GIS', skin: SKIN_ICF, hair: '#B98D55', brow: '#8F6A3E', hairStyle: 'short', beard: true, glasses: true, shirt: PAL.turq, sleeve: PAL.turq, pants: '#3b4460', shW: 62 });
   CAST.abuela = buildPerson({ name: 'Abuela', skin: SKIN[3], hair: '#d9d4cc', hairStyle: 'bun', shirt: PAL.lav, dress: true, pattern: 'flowers', patCol: PAL.cream, scale: .92, shoes: '#6b3d2e', brow: '#9a918a', earring: true });
   CAST.kid = buildPerson({ name: 'Nene con pandero', skin: SKIN[5], hair: '#15100c', hairStyle: 'kidCurls', shirt: PAL.sun, pants: PAL.tealDk, scale: .7, shoes: PAL.flam });
-  CAST.leader = buildPerson({ name: 'Líder, Departamento de la Vivienda', skin: SKIN_LEADER, hair: '#2B1B12', hairStyle: 'short', shirt: PAL.cream, blazer: PAL.night, pants: PAL.night, longSleeve: true, sleeve: PAL.night, shW: 62 });
+  CAST.leader = buildPerson({ name: 'Líder, Departamento de la Vivienda', skin: SKIN_LEADER, hair: '#231812', brow: '#1E140F', hairStyle: 'quiff', beard: true, mustache: true, shirt: '#DDE6F1', blazer: '#243C73', pants: '#243C73', longSleeve: true, sleeve: '#243C73', shW: 62, watch: true, shoes: '#1B1B22' });
   CAST.n1 = buildPerson({ name: 'Vecino', skin: SKIN[4], hair: '#3a2a20', hairStyle: 'bald', mustache: true, shirt: PAL.pink, pants: '#5a4a3a', scale: .98 });
   CAST.n2 = buildPerson({ name: 'Vecina', skin: SKIN[1], hair: PAL.flamDk, hairStyle: 'wrap', shirt: PAL.yel, dress: true, pattern: 'flowers', patCol: PAL.flam, scale: .95 });
   CAST.n3 = buildPerson({ name: 'Vecino joven', skin: SKIN[2], hair: '#1b1410', hairStyle: 'short', hat: 'cap', hatCol: PAL.flam, shirt: PAL.night, pants: '#3e5f7a', scale: .97 });
@@ -1014,8 +1017,8 @@ SC.hands = (ctx, t, p) => {
   ctx.fillStyle = SKIN_ICF; roundRect(ctx, 960, 600, 200, 150, 50); ctx.fill(); ctx.restore();
   // left person's (leader) sleeve + back of hand
   ctx.save(); ctx.translate(lx, sq);
-  ctx.fillStyle = PAL.night; ctx.beginPath(); ctx.moveTo(-100, 1150); ctx.lineTo(760, 620); ctx.lineTo(830, 750); ctx.lineTo(40, 1260); ctx.fill();
-  ctx.fillStyle = PAL.cream; ctx.beginPath(); ctx.moveTo(745, 612); ctx.lineTo(795, 585); ctx.lineTo(865, 715); ctx.lineTo(825, 745); ctx.fill();
+  ctx.fillStyle = '#243C73'; ctx.beginPath(); ctx.moveTo(-100, 1150); ctx.lineTo(760, 620); ctx.lineTo(830, 750); ctx.lineTo(40, 1260); ctx.fill();
+  ctx.fillStyle = '#DDE6F1'; ctx.beginPath(); ctx.moveTo(745, 612); ctx.lineTo(795, 585); ctx.lineTo(865, 715); ctx.lineTo(825, 745); ctx.fill();
   ctx.fillStyle = SKIN_LEADER; roundRect(ctx, 790, 590, 240, 140, 55); ctx.fill();
   ctx.strokeStyle = mix(SKIN_LEADER, PAL.ink, .3); ctx.lineWidth = 4; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(850 + i * 34, 620); ctx.lineTo(880 + i * 34, 640); ctx.stroke(); } ctx.restore();
   // analyst fingers wrap over the back of the leader's hand
