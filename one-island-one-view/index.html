@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>One Island, One View</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +21,7 @@
   .es { font-family: var(--cond); font-size: clamp(16px, 2vw, 22px); color: var(--sun); letter-spacing: .04em; }
   .stage { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: #000; border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--teal); }
   canvas { display: block; width: 100%; height: 100%; }
+  [hidden] { display: none !important; }
   .gate { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(16, 26, 54, .12); border: 0; cursor: pointer; color: var(--ink); font: inherit; }
   .gate span { font-family: var(--display); font-size: clamp(18px, 3vw, 34px); background: var(--flam); padding: .45em .9em; box-shadow: 5px 5px 0 var(--ink); }
   .gate:focus-visible span, button:focus-visible, input:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
@@ -34,6 +40,8 @@
   .note { color: var(--muted); font-size: 12px; max-width: 72ch; line-height: 1.55; }
   @media (max-width: 560px) { .marks button { font-size: 9px; } }
 </style>
+</head>
+<body>
 <div class="wrap">
   <header>
     <h1>ONE ISLAND, ONE VIEW</h1>
@@ -54,7 +62,7 @@
   <div class="now"><span>SECTION <b id="sec">INTRO</b></span><span>SHOT <b id="shot">—</b></span></div>
   <p class="note">The video is drawn frame by frame in your browser from the same code that rendered the MP4, and each frame is timed to the song's playback position. Audio is the unaltered master (Opus in MP4); if your browser can't play it, use the MP4.</p>
 </div>
-<audio id="au" src="master-audio.mp4" preload="auto"></audio>
+<audio id="au" preload="auto"><source src="master-audio.mp4" type='audio/mp4; codecs="opus"'><source src="audio-aac.mp4" type='audio/mp4; codecs="mp4a.40.2"'></audio>
 <script>(function(root){ const OIOV = (function(){
 // ===== 00_core.js =====
 // ============================================================================
@@ -1803,8 +1811,10 @@ return { init, renderFrame, W, H, get shots() { return SHOTS; }, drawRig, CAST, 
   const NAMES = { INTRO: 'Intro', V1: 'Verse 1', PRE1: 'Pre-chorus', BRK1: 'Break', CH1: 'Chorus', V2: 'Verse 2', PRE2: 'Pre-chorus', BRK2: 'Break', CH2: 'Chorus', BR: 'Bridge', TAG: 'Tag', FCH: 'Final chorus', DROP: 'Final chorus', OUTRO: 'Outro' };
   const marks = document.getElementById('marks');
   MV_DATA.timing.sections.filter(s => !/BRK|DROP|TAG/.test(s.name)).forEach(s => { const b = document.createElement('button'); b.type = 'button'; b.textContent = NAMES[s.name].toUpperCase(); b.style.left = (s.t0 / DUR * 100) + '%'; if (marks.children.length % 2) b.classList.add('low'); if (s.name === 'OUTRO') { b.classList.add('end'); b.classList.remove('low'); b.style.left = '100%'; } b.addEventListener('click', () => go(s.t0 + 0.01)); marks.appendChild(b); });
-  function go(t) { scrubT = t; try { au.currentTime = t; } catch (e) {} lastDrawn = -1; }
-  function curT() { return au.paused ? scrubT : au.currentTime; }
+  function go(t) { poster = false; scrubT = t; try { au.currentTime = t; } catch (e) {} lastDrawn = -1; }
+  let playing = false;
+  let poster = true;
+  function curT() { return playing ? au.currentTime : poster ? 3.9 : scrubT; }
   function draw() {
     const t = Math.min(DUR - 0.001, Math.max(0, curT()));
     if (ready && (t !== lastDrawn)) {
@@ -1816,17 +1826,21 @@ return { init, renderFrame, W, H, get shots() { return SHOTS; }, drawRig, CAST, 
     }
     requestAnimationFrame(draw);
   }
-  function toggle() { if (au.paused) { au.currentTime = scrubT; const p = au.play(); if (p && p.catch) p.catch(() => {}); } else { au.pause(); scrubT = au.currentTime; } }
-  au.addEventListener('play', () => { gate.hidden = true; play.textContent = 'PAUSE'; });
-  au.addEventListener('pause', () => { play.textContent = 'PLAY'; scrubT = au.currentTime; });
-  au.addEventListener('ended', () => { scrubT = 0; gate.hidden = false; });
+  function toggle() { if (!playing) { poster = false; try { au.currentTime = scrubT; } catch (e) {} gate.hidden = true; const p = au.play(); if (p && p.catch) p.catch(() => { gate.hidden = false; play.textContent = 'PLAY'; }); } else { au.pause(); } }
+  au.addEventListener('loadedmetadata', () => { if (!playing && scrubT > 0) { try { au.currentTime = scrubT; } catch (e) {} } });
+  au.addEventListener('playing', () => { playing = true; gate.hidden = true; play.textContent = 'PAUSE'; });
+  au.addEventListener('pause', () => { playing = false; scrubT = au.currentTime; play.textContent = 'PLAY'; gate.hidden = false; lastDrawn = -1; });
+  au.addEventListener('ended', () => { playing = false; scrubT = 0; gate.hidden = false; play.textContent = 'PLAY'; });
   gate.addEventListener('click', toggle); play.addEventListener('click', toggle);
   seek.addEventListener('input', () => go(parseFloat(seek.value)));
   document.addEventListener('keydown', e => { if (e.code === 'Space' && e.target === document.body) { e.preventDefault(); toggle(); } });
   const fams = ['400 40px "Bowlby One"', '400 40px "Anton"', '400 40px "Space Mono"', '400 40px "Bungee"'];
   Promise.all(fams.map(f => document.fonts.load(f, 'Aá¡'))).catch(() => {}).then(() => {
     OIOV.init({ canvas: (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }, Path2D: window.Path2D }, MV_DATA);
-    ready = true; go(3.9); requestAnimationFrame(draw);
+    ready = true; requestAnimationFrame(draw);
   });
 })();
 </script>
+
+</body>
+</html>
