@@ -405,9 +405,20 @@ function buildPerson(spec) {
   const tor = spec.dress
     ? `M${-shW} ${shY + 8 * s}Q0 ${shY - 12 * s} ${shW} ${shY + 8 * s}L${shW + 4 * s} ${hipY - 40 * s}L${hipW + 34 * s} ${-70 * s}Q0 ${-58 * s} ${-hipW - 34 * s} ${-70 * s}L${-shW - 4 * s} ${hipY - 40 * s}Z`
     : `M${-shW} ${shY + 8 * s}Q0 ${shY - 12 * s} ${shW} ${shY + 8 * s}L${hipW + 4 * s} ${hipY + 14 * s}Q0 ${hipY + 22 * s} ${-hipW - 4 * s} ${hipY + 14 * s}Z`;
-  add('torso', tor, { fill: spec.shirt, z: 3, pivot: [0, hipY], parent: null });
+  add('torso', tor, { fill: spec.suit || spec.shirt, z: 3, pivot: [0, hipY], parent: null });
   if (spec.vest) add('vest', `M${-shW + 8 * s} ${shY + 10 * s}L${-14 * s} ${shY + 6 * s}L${-18 * s} ${hipY + 12 * s}L${-hipW} ${hipY + 12 * s}Z M${shW - 8 * s} ${shY + 10 * s}L${14 * s} ${shY + 6 * s}L${18 * s} ${hipY + 12 * s}L${hipW} ${hipY + 12 * s}Z`, { fill: spec.vest, z: 4, parent: 'torso' });
   if (spec.vest) add('vestStripe', `M${-shW + 6 * s} ${hipY - 30 * s}H${-18 * s}V${hipY - 22 * s}H${-shW + 4 * s}Z M${shW - 6 * s} ${hipY - 30 * s}H${18 * s}V${hipY - 22 * s}H${shW - 4 * s}Z`, { fill: PAL.cream, z: 5, parent: 'torso' });
+  if (spec.suit) { // tailored jacket: open-collar shirt V, notched lapels, buttons
+    const vy = shY + 105 * s, dk = mix(spec.suit, PAL.ink, .3);
+    add('shirtV', `M${-20 * s} ${shY - 4 * s}L${20 * s} ${shY - 4 * s}L0 ${vy}Z`, { fill: spec.shirt, z: 4, parent: 'torso' });
+    add('collarL', `M${-20 * s} ${shY - 6 * s}L${-4 * s} ${shY + 22 * s}L${-24 * s} ${shY + 14 * s}Z`, { fill: spec.shirt, z: 4.3, parent: 'torso' });
+    add('collarR', `M${20 * s} ${shY - 6 * s}L${4 * s} ${shY + 22 * s}L${24 * s} ${shY + 14 * s}Z`, { fill: spec.shirt, z: 4.3, parent: 'torso' });
+    add('lapelL', `M${-24 * s} ${shY + 2 * s}L${-6 * s} ${vy - 4 * s}L${-14 * s} ${vy - 10 * s}L${-40 * s} ${shY + 50 * s}L${-30 * s} ${shY + 36 * s}L${-38 * s} ${shY + 20 * s}Z`, { fill: dk, z: 4.5, parent: 'torso' });
+    add('lapelR', `M${24 * s} ${shY + 2 * s}L${6 * s} ${vy - 4 * s}L${14 * s} ${vy - 10 * s}L${40 * s} ${shY + 50 * s}L${30 * s} ${shY + 36 * s}L${38 * s} ${shY + 20 * s}Z`, { fill: dk, z: 4.5, parent: 'torso' });
+    add('btn1', dEll(3 * s, vy + 18 * s, 3.4 * s, 3.4 * s), { fill: dk, z: 4.6, parent: 'torso' });
+    add('btn2', dEll(3 * s, vy + 46 * s, 3.4 * s, 3.4 * s), { fill: dk, z: 4.6, parent: 'torso' });
+    add('pocket', `M${22 * s} ${shY + 62 * s}H${44 * s}`, { stroke: dk, lw: 3 * s, z: 4.6, parent: 'torso' });
+  }
   if (spec.blazer) add('lapels', `M${-shW + 6 * s} ${shY + 8 * s}L${-6 * s} ${shY + 70 * s}L${-4 * s} ${hipY + 14 * s}L${-hipW - 2 * s} ${hipY + 14 * s}Z M${shW - 6 * s} ${shY + 8 * s}L${6 * s} ${shY + 70 * s}L${4 * s} ${hipY + 14 * s}L${hipW + 2 * s} ${hipY + 14 * s}Z`, { fill: spec.blazer, z: 4, parent: 'torso' });
   if (spec.pattern === 'flowers') for (let i = 0; i < 7; i++) add('fl' + i, dEll((hash(i * 3) - .5) * shW * 1.5, shY + 30 * s + hash(i * 5) * (hipY - shY + (spec.dress ? 60 : 0) * s), 7 * s, 7 * s), { fill: spec.patCol || PAL.pink, z: 4, parent: 'torso' });
   // neck + head
@@ -424,9 +435,14 @@ function buildPerson(spec) {
   add('browR', `M${5 * s} ${hy - 12 * s}Q${13 * s} ${hy - 16 * s} ${21 * s} ${hy - 11 * s}`, { stroke: spec.brow || mix(spec.hair, PAL.ink, .5), lw: 3.2 * s, z: 9, parent: 'head' });
   add('nose', `M${-2 * s} ${hy + 4 * s}Q${4 * s} ${hy + 12 * s} ${-3 * s} ${hy + 15 * s}`, { stroke: dk, lw: 2.6 * s, z: 9, parent: 'head' });
   add('mouth', '', { fill: '#5a1f1a', z: 9, parent: 'head', mouth: [0, hy + 25 * s, s] });
-  if (spec.beard) add('beard', `M${-hr + 4 * s} ${hy + 4 * s}Q${-hr + 2 * s} ${hy + hry + 6 * s} 0 ${hy + hry + 8 * s}Q${hr - 2 * s} ${hy + hry + 6 * s} ${hr - 4 * s} ${hy + 4 * s}Q${hr - 8 * s} ${hy + 30 * s} ${12 * s} ${hy + 30 * s}Q0 ${hy + 20 * s} ${-12 * s} ${hy + 30 * s}Q${-hr + 8 * s} ${hy + 30 * s} ${-hr + 4 * s} ${hy + 4 * s}Z`, { fill: spec.hair, z: 8.5, parent: 'head' });
-  if (spec.mustache) add('mst', `M${-14 * s} ${hy + 21 * s}Q0 ${hy + 13 * s} ${14 * s} ${hy + 21 * s}Q0 ${hy + 18 * s} ${-14 * s} ${hy + 21 * s}Z`, { fill: spec.hair, z: 9.5, parent: 'head' });
+  if (spec.beard) add('beard', `M${-hr + 4 * s} ${hy + 4 * s}Q${-hr + 2 * s} ${hy + hry + 6 * s} 0 ${hy + hry + 8 * s}Q${hr - 2 * s} ${hy + hry + 6 * s} ${hr - 4 * s} ${hy + 4 * s}Q${hr - 8 * s} ${hy + 30 * s} ${12 * s} ${hy + 30 * s}Q0 ${hy + 20 * s} ${-12 * s} ${hy + 30 * s}Q${-hr + 8 * s} ${hy + 30 * s} ${-hr + 4 * s} ${hy + 4 * s}Z`, { fill: spec.beardCol || spec.hair, z: 8.5, parent: 'head' });
+  if (spec.mustache) add('mst', `M${-14 * s} ${hy + 21 * s}Q0 ${hy + 13 * s} ${14 * s} ${hy + 21 * s}Q0 ${hy + 18 * s} ${-14 * s} ${hy + 21 * s}Z`, { fill: spec.beardCol || spec.hair, z: 9.5, parent: 'head' });
   add('hairFront', hairFront(spec, hy, hr, hry, s), { fill: spec.hair, z: 10, parent: 'head' });
+  if (spec.grey) { const g = spec.grey;
+    add('greyL', `M${-hr - 1 * s} ${hy - 2 * s}Q${-hr - 2 * s} ${hy - 20 * s} ${-hr + 4 * s} ${hy - 26 * s}L${-hr + 4 * s} ${hy - 16 * s}Q${-hr + 1.5 * s} ${hy - 9 * s} ${-hr + 1 * s} ${hy - 1 * s}Z`, { fill: g, z: 10.2, parent: 'head' });
+    add('greyR', `M${hr + 1 * s} ${hy - 2 * s}Q${hr + 2 * s} ${hy - 20 * s} ${hr - 4 * s} ${hy - 26 * s}L${hr - 4 * s} ${hy - 16 * s}Q${hr - 1.5 * s} ${hy - 9 * s} ${hr - 1 * s} ${hy - 1 * s}Z`, { fill: g, z: 10.2, parent: 'head' });
+    add('greyS', `M${-hr * .35} ${hy - hry - 4 * s}Q${-2 * s} ${hy - hry - 16 * s} ${hr * .4} ${hy - hry - 14 * s}M${-hr * .2} ${hy - hry + 2 * s}Q${4 * s} ${hy - hry - 8 * s} ${hr * .5} ${hy - hry - 6 * s}`, { stroke: mix(g, spec.hair, .45), lw: 1.6 * s, z: 10.3, parent: 'head' });
+  }
   if (spec.glasses) add('glasses', `M${-23 * s} ${hy + 1 * s}a10 9 0 1 0 20 0a10 9 0 1 0 -20 0M${3 * s} ${hy + 1 * s}a10 9 0 1 0 20 0a10 9 0 1 0 -20 0M${-3 * s} ${hy}H${3 * s}`, { stroke: PAL.ink, lw: 3 * s, z: 11, parent: 'head' });
   if (spec.hat === 'hard') add('hat', `M${-hr - 8 * s} ${hy - 18 * s}Q${-hr} ${hy - hry - 22 * s} 0 ${hy - hry - 22 * s}Q${hr} ${hy - hry - 22 * s} ${hr + 8 * s} ${hy - 18 * s}H${hr + 16 * s}V${hy - 11 * s}H${-hr - 16 * s}V${hy - 18 * s}Z`, { fill: PAL.sun, z: 12, parent: 'head' });
   if (spec.hat === 'cap') add('hat', `M${-hr - 2 * s} ${hy - 14 * s}Q${-hr} ${hy - hry - 12 * s} 0 ${hy - hry - 12 * s}Q${hr} ${hy - hry - 12 * s} ${hr + 2 * s} ${hy - 14 * s}Z M${-hr - 2 * s} ${hy - 16 * s}H${-hr - 34 * s}Q${-hr - 30 * s} ${hy - 8 * s} ${-hr} ${hy - 8 * s}Z`, { fill: spec.hatCol || PAL.teal, z: 12, parent: 'head' });
@@ -476,7 +492,7 @@ function initCast() {
   CAST.analyst = buildPerson({ name: 'ICF — analista GIS', skin: SKIN_ICF, hair: '#B98D55', brow: '#8F6A3E', hairStyle: 'short', beard: true, glasses: true, shirt: PAL.turq, sleeve: PAL.turq, pants: '#3b4460', shW: 62 });
   CAST.abuela = buildPerson({ name: 'Abuela', skin: SKIN[3], hair: '#d9d4cc', hairStyle: 'bun', shirt: PAL.lav, dress: true, pattern: 'flowers', patCol: PAL.cream, scale: .92, shoes: '#6b3d2e', brow: '#9a918a', earring: true });
   CAST.kid = buildPerson({ name: 'Nene con pandero', skin: SKIN[5], hair: '#15100c', hairStyle: 'kidCurls', shirt: PAL.sun, pants: PAL.tealDk, scale: .7, shoes: PAL.flam });
-  CAST.leader = buildPerson({ name: 'Líder, Departamento de la Vivienda', skin: SKIN_LEADER, hair: '#231812', brow: '#1E140F', hairStyle: 'quiff', beard: true, mustache: true, shirt: '#DDE6F1', blazer: '#243C73', pants: '#243C73', longSleeve: true, sleeve: '#243C73', shW: 62, watch: true, shoes: '#1B1B22' });
+  CAST.leader = buildPerson({ name: 'Líder, Departamento de la Vivienda', skin: SKIN_LEADER, hair: '#3B2B21', brow: '#33241A', hairStyle: 'quiff', grey: '#8F8780', beard: true, beardCol: mix('#3B2B21', SKIN_LEADER, .58), mustache: true, shirt: '#DDE6F1', suit: '#243C73', pants: '#243C73', longSleeve: true, sleeve: '#243C73', shW: 62, watch: true, shoes: '#1B1B22' });
   CAST.n1 = buildPerson({ name: 'Vecino', skin: SKIN[4], hair: '#3a2a20', hairStyle: 'bald', mustache: true, shirt: PAL.pink, pants: '#5a4a3a', scale: .98 });
   CAST.n2 = buildPerson({ name: 'Vecina', skin: SKIN[1], hair: PAL.flamDk, hairStyle: 'wrap', shirt: PAL.yel, dress: true, pattern: 'flowers', patCol: PAL.flam, scale: .95 });
   CAST.n3 = buildPerson({ name: 'Vecino joven', skin: SKIN[2], hair: '#1b1410', hairStyle: 'short', hat: 'cap', hatCol: PAL.flam, shirt: PAL.night, pants: '#3e5f7a', scale: .97 });
@@ -525,7 +541,7 @@ function drawRig(ctx, rig, o) {
       ctx.strokeStyle = ps; ctx.lineWidth = p.lw; ctx.stroke(p.path);
     } else {
       ctx.fillStyle = pf; ctx.fill(p.path);
-      if (o.key && !p.eye && !p.id.startsWith('cheek') && !p.id.startsWith('fl') && !p.id.startsWith('ring')) { ctx.save(); ctx.translate(mis[0] / s, mis[1] / s); ctx.strokeStyle = hexA(PAL.ink, .85); ctx.lineWidth = (o.keyW || 3) / s; ctx.lineJoin = 'round'; ctx.stroke(p.path); ctx.restore(); }
+      if (o.key && !p.eye && p.id !== 'beard' && p.id !== 'mst' && !p.id.startsWith('grey') && !p.id.startsWith('cheek') && !p.id.startsWith('fl') && !p.id.startsWith('ring')) { ctx.save(); ctx.translate(mis[0] / s, mis[1] / s); ctx.strokeStyle = hexA(PAL.ink, .85); ctx.lineWidth = (o.keyW || 3) / s; ctx.lineJoin = 'round'; ctx.stroke(p.path); ctx.restore(); }
     }
   }
   if (o.anchors) { for (const id of ['handL', 'handR', 'head']) { const m = tx[id], p = rig.byId[id]; const b = p.d.match(/M([-\d.]+) ([-\d.]+)/); const lx = id === 'head' ? 0 : (+b[1] + 11 * (rig.spec.scale || 1)), ly = +b[2]; o.anchors[id] = [m.a * lx + m.c * ly + m.e, m.b * lx + m.d * ly + m.f]; } }
