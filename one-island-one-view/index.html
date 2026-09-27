@@ -386,6 +386,7 @@ function dRound(x, y, w, h, r) { return `M${x + r} ${y}H${x + w - r}Q${x + w} ${
 function dSeg(x1, y1, x2, y2) { return `M${f1(x1)} ${f1(y1)}L${f1(x2)} ${f1(y2)}`; }
 
 const CAST = {};
+const SKIN_LEADER = '#E6BC96', SKIN_ICF = '#F5D6C0';
 /** Build a humanoid rig from a spec. */
 function buildPerson(spec) {
   const s = spec.scale || 1, P = [];
@@ -469,10 +470,10 @@ function hairFront(sp, hy, hr, hry, s) {
 }
 function initCast() {
   CAST.inspector = buildPerson({ name: 'Inspectora de campo', skin: SKIN[2], hair: '#2a1a14', hairStyle: 'curlyPony', shirt: PAL.teal, vest: PAL.sun, pants: PAL.night, hat: 'hard', earring: true });
-  CAST.analyst = buildPerson({ name: 'Analista GIS', skin: SKIN[0], hair: '#1a1210', hairStyle: 'short', beard: true, glasses: true, shirt: PAL.turq, sleeve: PAL.turq, pants: '#3b4460', shW: 62 });
+  CAST.analyst = buildPerson({ name: 'ICF — analista GIS', skin: SKIN_ICF, hair: '#B98D55', brow: '#8F6A3E', hairStyle: 'short', beard: true, glasses: true, shirt: PAL.turq, sleeve: PAL.turq, pants: '#3b4460', shW: 62 });
   CAST.abuela = buildPerson({ name: 'Abuela', skin: SKIN[3], hair: '#d9d4cc', hairStyle: 'bun', shirt: PAL.lav, dress: true, pattern: 'flowers', patCol: PAL.cream, scale: .92, shoes: '#6b3d2e', brow: '#9a918a', earring: true });
   CAST.kid = buildPerson({ name: 'Nene con pandero', skin: SKIN[5], hair: '#15100c', hairStyle: 'kidCurls', shirt: PAL.sun, pants: PAL.tealDk, scale: .7, shoes: PAL.flam });
-  CAST.leader = buildPerson({ name: 'Líder municipal', skin: SKIN[1], hair: '#8f8a86', hairStyle: 'afro', shirt: PAL.cream, blazer: PAL.night, pants: PAL.night, glasses: true, earring: true, longSleeve: true, sleeve: PAL.night });
+  CAST.leader = buildPerson({ name: 'Líder, Departamento de la Vivienda', skin: SKIN_LEADER, hair: '#2B1B12', hairStyle: 'short', shirt: PAL.cream, blazer: PAL.night, pants: PAL.night, longSleeve: true, sleeve: PAL.night, shW: 62 });
   CAST.n1 = buildPerson({ name: 'Vecino', skin: SKIN[4], hair: '#3a2a20', hairStyle: 'bald', mustache: true, shirt: PAL.pink, pants: '#5a4a3a', scale: .98 });
   CAST.n2 = buildPerson({ name: 'Vecina', skin: SKIN[1], hair: PAL.flamDk, hairStyle: 'wrap', shirt: PAL.yel, dress: true, pattern: 'flowers', patCol: PAL.flam, scale: .95 });
   CAST.n3 = buildPerson({ name: 'Vecino joven', skin: SKIN[2], hair: '#1b1410', hairStyle: 'short', hat: 'cap', hatCol: PAL.flam, shirt: PAL.night, pants: '#3e5f7a', scale: .97 });
@@ -1010,21 +1011,21 @@ SC.hands = (ctx, t, p) => {
   ctx.save(); ctx.translate(rx, -sq);
   ctx.fillStyle = PAL.turq; ctx.beginPath(); ctx.moveTo(2050, 1150); ctx.lineTo(1150, 610); ctx.lineTo(1090, 740); ctx.lineTo(1900, 1260); ctx.fill();
   ctx.fillStyle = mix(PAL.turq, PAL.ink, .2); ctx.beginPath(); ctx.moveTo(1150, 610); ctx.lineTo(1190, 590); ctx.lineTo(1120, 760); ctx.lineTo(1090, 740); ctx.fill();
-  ctx.fillStyle = SKIN[0]; roundRect(ctx, 960, 600, 200, 150, 50); ctx.fill(); ctx.restore();
+  ctx.fillStyle = SKIN_ICF; roundRect(ctx, 960, 600, 200, 150, 50); ctx.fill(); ctx.restore();
   // left person's (leader) sleeve + back of hand
   ctx.save(); ctx.translate(lx, sq);
   ctx.fillStyle = PAL.night; ctx.beginPath(); ctx.moveTo(-100, 1150); ctx.lineTo(760, 620); ctx.lineTo(830, 750); ctx.lineTo(40, 1260); ctx.fill();
   ctx.fillStyle = PAL.cream; ctx.beginPath(); ctx.moveTo(745, 612); ctx.lineTo(795, 585); ctx.lineTo(865, 715); ctx.lineTo(825, 745); ctx.fill();
-  ctx.fillStyle = SKIN[1]; roundRect(ctx, 790, 590, 240, 140, 55); ctx.fill();
-  ctx.strokeStyle = mix(SKIN[1], PAL.ink, .3); ctx.lineWidth = 4; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(850 + i * 34, 620); ctx.lineTo(880 + i * 34, 640); ctx.stroke(); } ctx.restore();
+  ctx.fillStyle = SKIN_LEADER; roundRect(ctx, 790, 590, 240, 140, 55); ctx.fill();
+  ctx.strokeStyle = mix(SKIN_LEADER, PAL.ink, .3); ctx.lineWidth = 4; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.moveTo(850 + i * 34, 620); ctx.lineTo(880 + i * 34, 640); ctx.stroke(); } ctx.restore();
   // analyst fingers wrap over the back of the leader's hand
   ctx.save(); ctx.translate(rx, -sq);
-  ctx.fillStyle = SKIN[0]; roundRect(ctx, 850, 600, 160, 130, 40); ctx.fill(); for (let i = 0; i < 4; i++) { roundRect(ctx, 845 + i * 38, 605 + i * 6, 36, 128 - i * 8, 18); ctx.fill(); }
-  ctx.strokeStyle = mix(SKIN[0], PAL.ink, .4); ctx.lineWidth = 3; for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(845 + i * 38, 612 + i * 6); ctx.lineTo(845 + i * 38, 720 - i * 3); ctx.stroke(); }
+  ctx.fillStyle = SKIN_ICF; roundRect(ctx, 850, 600, 160, 130, 40); ctx.fill(); for (let i = 0; i < 4; i++) { roundRect(ctx, 845 + i * 38, 605 + i * 6, 36, 128 - i * 8, 18); ctx.fill(); }
+  ctx.strokeStyle = mix(SKIN_ICF, PAL.ink, .4); ctx.lineWidth = 3; for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(845 + i * 38, 612 + i * 6); ctx.lineTo(845 + i * 38, 720 - i * 3); ctx.stroke(); }
   ctx.restore();
   // leader's thumb on top
-  ctx.save(); ctx.translate(lx, sq); ctx.fillStyle = SKIN[1]; ctx.beginPath(); ctx.ellipse(1030, 588, 78, 26, -.15, 0, 6.283); ctx.fill();
-  ctx.fillStyle = mix(SKIN[1], PAL.cream, .45); ctx.beginPath(); ctx.ellipse(1092, 580, 14, 10, -.15, 0, 6.283); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.translate(lx, sq); ctx.fillStyle = SKIN_LEADER; ctx.beginPath(); ctx.ellipse(1030, 588, 78, 26, -.15, 0, 6.283); ctx.fill();
+  ctx.fillStyle = mix(SKIN_LEADER, PAL.cream, .45); ctx.beginPath(); ctx.ellipse(1092, 580, 14, 10, -.15, 0, 6.283); ctx.fill(); ctx.restore();
   if (t > 28.98) { const k = clamp((t - 28.98) / .5); ctx.strokeStyle = hexA(PAL.sun, 1 - k); ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(960, 650, 160 + k * 260, 0, 6.283); ctx.stroke(); }
   subtitle(ctx, LY(2), t, { y: 150, size: 60 });
 };
