@@ -38,7 +38,7 @@ svg{{position:absolute;right:-40px;top:-30px}}
   <div>
     <div class="rule"></div>
     <p class="name">Jason Matney<span>, Ph.D.</span></p>
-    <p class="meta">Island-scale feature extraction · Production ML pipelines<br>Washington, DC</p>
+    <p class="meta">Island-scale feature extraction · Production ML pipelines<br>Washington, DC · Active TS clearance</p>
   </div>
 </div>
 <div class="right">
