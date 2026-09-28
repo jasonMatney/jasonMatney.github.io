@@ -163,3 +163,6 @@
 .clearance-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
 .expertise .cred-clearance p{font:600 12px/1.45 var(--sans);color:var(--accent);letter-spacing:.2px}
 @media(max-width:700px){.clearance{margin-top:20px;padding:7px 11px;font-size:9px;letter-spacing:1.1px}}
+
+/* keep the hero copy above the atlas fade, which shares its stacking level */
+.hero-copy{z-index:3}
