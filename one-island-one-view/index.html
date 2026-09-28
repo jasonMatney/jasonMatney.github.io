@@ -514,8 +514,13 @@ function poseIdle(t, seed = 0) { const b = Math.sin(t * 2.1 + seed) * .02; retur
 function poseWave(t, seed = 0) { const p = poseIdle(t, seed); p.uarmR = -2.5 + Math.sin(t * 9) * .06; p.larmR = -.5 + Math.sin(t * 9 + 1) * .45; return p; }
 function poseCheer(t, seed = 0, amt = 1) { const p = poseIdle(t, seed); const bb = beatPulse(t, 5); p.uarmL = lerp(.08, 2.55, amt) + bb * .1; p.uarmR = lerp(-.08, -2.55, amt) - bb * .1; p.larmL = lerp(.12, .3, amt); p.larmR = lerp(-.12, -.3, amt); p.head = -.05 + bb * .05; return p; }
 function posePoint(t, seed = 0) { const p = poseIdle(t, seed); p.uarmR = -1.55; p.larmR = -.2; return p; }
-function poseDrum(t, seed = 0) { // kid with pandero: left arm holds drum up, right hand strikes on hits
-  const p = poseIdle(t, seed); const hp = hitPulse(t, 12); p.uarmL = 2.25; p.larmL = -.75; p.uarmR = .35 + hp * .25; p.larmR = 1.75 - hp * .6; p.head = -.05 + hp * .06; return p; }
+// strikes land on every beat, at the audible attack (~80 ms after the grid), matching the intro "huh" chants
+function drumPhase(t) { return beatPhase(t - 0.08); }
+function drumHit(t) { const ph = drumPhase(t); return ph < 0.2 ? 1 - ph / 0.2 : 0; }
+function poseDrum(t, seed = 0) { // kid with pandero: left hand holds drum up, right hand strikes on the beat
+  const p = poseIdle(t, seed); const ph = drumPhase(t);
+  const k = ph < 0.08 ? 1 : ph < 0.55 ? 1 - easeOut((ph - 0.08) / 0.47) : easeIn((ph - 0.55) / 0.45);
+  p.uarmL = 2.25; p.larmL = -.75; p.uarmR = lerp(.9, 1.9, k); p.larmR = lerp(1.8, .7, k); p.head = -.05 + drumHit(t) * .06; return p; }
 function poseTablet(t, seed = 0) { const p = poseIdle(t, seed); p.uarmL = .55; p.larmL = 1.45; p.uarmR = -.55; p.larmR = -1.45; p.head = .12 + Math.sin(t) * .03; return p; }
 function poseHands(t, seed = 0) { const p = poseIdle(t, seed); p.uarmL = .35; p.larmL = .9; p.uarmR = -.35; p.larmR = -.9; return p; }
 // ---- mouth sync from lyrics ----
@@ -607,7 +612,7 @@ function drawDrone(ctx, x, y, s, t, o = {}) {
 }
 function drawPandero(ctx, x, y, r, t, rot = 0) {
   ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
-  const hp = hitPulse(t, 10);
+  const hp = drumHit(t);
   ctx.fillStyle = PAL.flamDk; ctx.beginPath(); ctx.ellipse(0, 0, r, r * .96, 0, 0, 6.283); ctx.fill();
   ctx.fillStyle = mix(PAL.cream, PAL.sand, .3 + hp * .3); ctx.beginPath(); ctx.ellipse(0, 0, r * .84, r * .8, 0, 0, 6.283); ctx.fill();
   ctx.strokeStyle = PAL.flam; ctx.lineWidth = r * .06; for (let i = 0; i < 8; i++) { const a = i / 8 * 6.283; ctx.beginPath(); ctx.moveTo(Math.cos(a) * r * .9, Math.sin(a) * r * .87); ctx.lineTo(Math.cos(a) * r * .99, Math.sin(a) * r * .95); ctx.stroke(); }
