@@ -1,4 +1,4 @@
-// Building-footprint demo: real U-Net outputs over public USGS imagery.
+// Building-footprint demo: real SAM 3.1 outputs over public USGS imagery.
 // Probability rasters are precomputed; thresholding and every metric shown
 // are computed here in the browser from the model's actual output.
 const AOIS = ['ponce', 'guaynabo'];
@@ -39,7 +39,7 @@ export function confusion(hist, t) {
 export async function createGeoAI({host, onReady}) {
   const $ = s => host.querySelector(s);
   const canvas = $('#geoai-canvas'), ctx = canvas.getContext('2d');
-  const state = {aoi: AOIS[0], threshold: 128, layer: 'agreement', data: {}};
+  const state = {aoi: AOIS[0], threshold: 51, layer: 'agreement', data: {}};
 
   async function load(aoi) {
     if (state.data[aoi]) return state.data[aoi];

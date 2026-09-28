@@ -27,19 +27,20 @@ Bump the `?v=` token on the `styles.css` and `app.bundle.js` tags in `index.html
 
 ## The segmentation demonstration
 
-A compact U-Net trained from scratch to segment building footprints from aerial imagery.
+Meta's SAM 3.1, run zero-shot with a text prompt, segmenting building footprints from aerial imagery. Nothing is trained on this imagery.
 
-- **Imagery** — USGS The National Map orthoimagery, public domain, at roughly 0.78 m/px. Eight areas of about 1.2 km across Puerto Rico.
+- **Imagery** — USGS The National Map orthoimagery, public domain, at roughly 0.78 m/px, in areas of about 1.2 km across Puerto Rico.
 - **Labels** — OpenStreetMap building footprints (© OpenStreetMap contributors, ODbL), rasterised to the imagery grid.
-- **Split** — six municipalities for training; Ponce and Guaynabo held out entirely and never seen during training. Reported numbers are from the held-out pair.
-- **Training** — 256 px tiles, flip and rotation augmentation, combined binary cross-entropy and Dice objective.
+- **Prompt selection** — "building", "roof" and "house" were compared on Bayamón only. "house" won (0.58 IoU vs 0.55 and 0.48). Ponce and Guaynabo were not used for any choice, and every reported number comes from them.
+- **Inference** — each tile is cut into overlapping 384 px windows (about 300 m), and each pixel keeps the highest mask probability × instance confidence of any detection over it. Windows are blended with a cosine feather.
+- **Result** — best IoU 0.538 in Ponce and 0.552 in Guaynabo. The compact U-Net the demo previously used, trained from scratch on six other municipalities, scored 0.50 and 0.59 on the same two areas.
 - **In the browser** — probability rasters are precomputed and shipped as 8-bit PNGs. Thresholding and every metric in the panel are computed client-side from the model's actual output against the held-out labels. Nothing in the readout is hard-coded.
 
-Regenerate the assets with `python3 tools/geoai/acquire.py`, then `train.py`, then `export_assets.py`. `hero_terrain.py` fetches USGS 3DEP elevation for the same extent as the hero footprints and writes real 2.5 m contours, so the terrain and the predicted buildings share one coordinate frame rather than the decorative contours the cover previously used. `make_og.py` builds the social card from those same layers.
+SAM 3.1 needs a GPU with more memory than a typical laptop has, so inference runs in Colab: open `tools/geoai/sam31_colab.ipynb` and run all. It downloads a zip to unpack over `assets/geoai/`. `hero_terrain.py` fetches USGS 3DEP elevation for the same extent as the hero footprints and writes real 2.5 m contours, so the terrain and the predicted buildings share one coordinate frame. `make_og.py` builds the social card from those same layers.
 
 ### Honest limits
 
-The labels are OpenStreetMap, not ground truth. Where the map is incomplete a correct detection scores as a false positive, so the "model only" areas mix genuine error with buildings nobody has mapped. The model also degrades on rooftops that share a spectral signature with pavement, under tree cover, and across dense contiguous roofs where it merges neighbours. A production system would need higher-resolution and multi-season imagery plus human verification of the labels before informing any real decision.
+The labels are OpenStreetMap, not ground truth. Where the map is incomplete a correct detection scores as a false positive, so the "model only" areas mix genuine error with buildings nobody has mapped. SAM's confidence also runs low on overhead imagery (best thresholds 0.15–0.25), so the slider opens at 0.20. A production system would need higher-resolution and multi-season imagery plus human verification of the labels before informing any real decision.
 
 ## Content boundaries
 

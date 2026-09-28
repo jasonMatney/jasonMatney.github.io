@@ -31,7 +31,7 @@ if (hero) {
     if (src) src.textContent = `USGS 3DEP · ${t.interval} m contours · ${Math.round(t.min)}–${Math.round(t.max)} m`;
   }).catch(() => {});
 
-  // Real building footprints predicted by the U-Net on held-out imagery.
+  // Real building footprints predicted by SAM 3.1 on held-out imagery.
   load('assets/geoai/hero-footprints.json').then(fp => {
     const layer = el('g', {fill: '#b76138', 'fill-opacity': .1, stroke: '#b76138', 'stroke-width': 1.1, 'stroke-linejoin': 'round', opacity: .92});
     for (const d of fp.paths) layer.append(el('path', {d}));

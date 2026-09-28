@@ -16,6 +16,8 @@ AOIS = [
     ("arecibo",   18.4655, -66.7285),
     ("guaynabo",  18.3580, -66.1110),
 ]
+# optional AOI names on the command line limit the fetch, e.g. `acquire.py ponce guaynabo`
+AOIS = [a for a in AOIS if not sys.argv[1:] or a[0] in sys.argv[1:]]
 HALF = 600        # metres -> 1200 m box
 PX   = 1536       # -> 0.78 m/px
 os.makedirs("data", exist_ok=True)
