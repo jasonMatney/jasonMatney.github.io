@@ -50,7 +50,8 @@ for c in cnts:
     paths.append("M"+" L".join(f"{x:.1f},{y:.1f}" for x,y in pts)+" Z")
 paths=sorted(paths,key=len,reverse=True)[:900]
 PROMPT=open("data/prompt.txt").read().strip() if os.path.exists("data/prompt.txt") else "building"
-json.dump(dict(count=len(paths),source=name,threshold=thr,model="SAM 3.1",prompt=PROMPT),
+MODEL=open("data/model.txt").read().strip() if os.path.exists("data/model.txt") else "SAM 3.1"
+json.dump(dict(count=len(paths),source=name,threshold=thr,model=MODEL,prompt=PROMPT),
           open(f"{OUT}/hero-meta.json","w"))
 json.dump(dict(count=len(paths),paths=paths), open(f"{OUT}/hero-footprints.json","w"))
 print(f"  hero: {len(paths)} footprints from {name}")

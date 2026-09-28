@@ -27,20 +27,22 @@ Bump the `?v=` token on the `styles.css` and `app.bundle.js` tags in `index.html
 
 ## The segmentation demonstration
 
-Meta's SAM 3.1, run zero-shot with a text prompt, segmenting building footprints from aerial imagery. Nothing is trained on this imagery.
+Meta's SAM 3.1, prompted with "house" and fine-tuned on OpenStreetMap footprints, segmenting buildings from aerial imagery.
 
 - **Imagery** — USGS The National Map orthoimagery, public domain, at roughly 0.78 m/px, in areas of about 1.2 km across Puerto Rico.
 - **Labels** — OpenStreetMap building footprints (© OpenStreetMap contributors, ODbL), rasterised to the imagery grid.
-- **Prompt selection** — "building", "roof" and "house" were compared on Bayamón only. "house" won (0.58 IoU vs 0.55 and 0.48). Ponce and Guaynabo were not used for any choice, and every reported number comes from them.
+- **Split** — San Juan, Caguas, Mayagüez, Carolina and Arecibo train. Bayamón chooses the prompt and the checkpoint. Ponce and Guaynabo are only scored, and every reported number comes from them.
+- **Prompt** — "building", "roof" and "house" were compared zero-shot on Bayamón; "house" won (0.58 IoU vs 0.55 and 0.48).
+- **Fine-tuning** — image backbone and text encoder frozen; the DETR encoder/decoder, mask decoder and scoring head (24.5M of 840M params) trained for 1,000 steps on random 384 px crops with flips and rotations. The loss is BCE + Dice on the same per-pixel map the site shows, not an instance-matching loss.
 - **Inference** — each tile is cut into overlapping 384 px windows (about 300 m), and each pixel keeps the highest mask probability × instance confidence of any detection over it. Windows are blended with a cosine feather.
-- **Result** — best IoU 0.538 in Ponce and 0.552 in Guaynabo. The compact U-Net the demo previously used, trained from scratch on six other municipalities, scored 0.50 and 0.59 on the same two areas.
+- **Result** — best IoU 0.581 in Ponce and 0.616 in Guaynabo. Zero-shot SAM 3.1 scored 0.538 and 0.552, and the compact U-Net the demo first used, trained from scratch on six municipalities, scored 0.50 and 0.59.
 - **In the browser** — probability rasters are precomputed and shipped as 8-bit PNGs. Thresholding and every metric in the panel are computed client-side from the model's actual output against the held-out labels. Nothing in the readout is hard-coded.
 
-SAM 3.1 needs a GPU with more memory than a typical laptop has, so inference runs in Colab: open `tools/geoai/sam31_colab.ipynb` and run all. It downloads a zip to unpack over `assets/geoai/`. `hero_terrain.py` fetches USGS 3DEP elevation for the same extent as the hero footprints and writes real 2.5 m contours, so the terrain and the predicted buildings share one coordinate frame. `make_og.py` builds the social card from those same layers.
+SAM 3.1 needs a GPU with more memory than a typical laptop has, so it runs in Colab: `tools/geoai/sam31_finetune_colab.ipynb` reproduces the published assets, and `sam31_colab.ipynb` the zero-shot baseline. Each downloads a zip to unpack over `assets/geoai/`. `hero_terrain.py` fetches USGS 3DEP elevation for the same extent as the hero footprints and writes real 2.5 m contours, so the terrain and the predicted buildings share one coordinate frame. `make_og.py` builds the social card from those same layers.
 
 ### Honest limits
 
-The labels are OpenStreetMap, not ground truth. Where the map is incomplete a correct detection scores as a false positive, so the "model only" areas mix genuine error with buildings nobody has mapped. SAM's confidence also runs low on overhead imagery (best thresholds 0.15–0.25), so the slider opens at 0.20. A production system would need higher-resolution and multi-season imagery plus human verification of the labels before informing any real decision.
+The labels are OpenStreetMap, not ground truth. Where the map is incomplete a correct detection scores as a false positive, so the "model only" areas mix genuine error with buildings nobody has mapped. The slider opens at 0.40, near the best threshold for both towns. A production system would need higher-resolution and multi-season imagery plus human verification of the labels before informing any real decision.
 
 ## Content boundaries
 

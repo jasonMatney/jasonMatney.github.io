@@ -2,24 +2,28 @@
 
 Reproduces the assets behind the demonstration on the site.
 
-## SAM 3.1 (what the site shows)
+## SAM 3.1, fine-tuned (what the site shows)
 
-SAM 3.1 is an 840M-parameter model, too big for an 8 GB laptop, so it runs in Colab. Open `sam31_colab.ipynb` on a GPU runtime, add a Hugging Face token with access to the gated `facebook/sam3.1` repo as the secret `HF_TOKEN`, and run all. It:
+SAM 3.1 is an 840M-parameter model, too big for an 8 GB laptop, so it runs in Colab. Both notebooks need a GPU runtime and a Hugging Face token with access to the gated `facebook/sam3.1` repo, stored as the Colab secret `HF_TOKEN`.
 
-1. fetches imagery and labels for Bayamón, Ponce and Guaynabo (`acquire.py`),
+`sam31_finetune_colab.ipynb` (A100 or L4; about 15 minutes on an A100) produces the published assets:
+
+1. fetches all eight areas (`acquire.py`),
 2. loads the SAM 3.1 detector into transformers' `Sam3Model` (`sam_infer.py`, using the key mapping in `convert_sam3_to_hf.py` from transformers),
-3. picks the text prompt on Bayamón only,
-4. runs Ponce and Guaynabo with that prompt, and
-5. writes the site assets (`export_assets.py`) and downloads them as `geoai_assets.zip`.
+3. trains the heads on five towns and keeps the checkpoint that does best on Bayamón (`ft_sam.py`),
+4. scores Ponce and Guaynabo, and
+5. writes the site assets (`export_assets.py`) and downloads them as `geoai_assets_ft.zip`.
 
-Unzip that over `assets/geoai/`, then locally:
+`sam31_colab.ipynb` is the zero-shot run that chose the prompt "house" on Bayamón. It scored 0.538 and 0.552 on the held-out pair, against 0.581 and 0.616 fine-tuned.
+
+Unzip the result over `assets/geoai/`, then locally:
 
 ```sh
 python3 hero_terrain.py   # real 3DEP contours for the hero, co-registered
 python3 make_og.py        # social card from the same layers
 ```
 
-The notebook embeds copies of the scripts, so regenerate it if you change them.
+The notebooks embed copies of the scripts, so regenerate them if you change the scripts.
 
 ## U-Net baseline
 

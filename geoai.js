@@ -39,7 +39,7 @@ export function confusion(hist, t) {
 export async function createGeoAI({host, onReady}) {
   const $ = s => host.querySelector(s);
   const canvas = $('#geoai-canvas'), ctx = canvas.getContext('2d');
-  const state = {aoi: AOIS[0], threshold: 51, layer: 'agreement', data: {}};
+  const state = {aoi: AOIS[0], threshold: 102, layer: 'agreement', data: {}};
 
   async function load(aoi) {
     if (state.data[aoi]) return state.data[aoi];

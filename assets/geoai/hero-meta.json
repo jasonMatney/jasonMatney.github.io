@@ -1,1 +1,1 @@
-{"count": 345, "source": "guaynabo", "threshold": 0.25, "model": "SAM 3.1", "prompt": "house"}
+{"count": 280, "source": "guaynabo", "threshold": 0.45, "model": "SAM 3.1, fine-tuned heads", "prompt": "house"}
